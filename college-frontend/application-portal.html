@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Admission Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #2d3748;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .btn-secondary {
+  background-color: #777;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.btn-secondary:hover {
+  background-color: #555;
+}
+
+        .main-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .tab {
+            padding: 1rem 2rem;
+            font-weight: 500;
+            color: #64748b;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem 0.5rem 0 0;
+        }
+        
+        .tab:hover:not(.active):not(:disabled) {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .tab.active {
+            color: #4c51bf;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(127, 156, 245, 0.1));
+            border-bottom-color: #667eea;
+            font-weight: 600;
+        }
+        
+        .tab:disabled {
+            color: #a0aec0;
+            cursor: not-allowed;
+        }
+        
+        .form-field {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            background-color: #ffffff;
+            font-size: 0.95rem;
+        }
+        
+        .form-field:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        input[type="date"].form-field {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.25rem;
+            padding-right: 3rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 0.875rem 2rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5a67d8, #6b46c1);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            color: #4a5568;
+            font-weight: 500;
+            padding: 0.875rem 2rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+            transform: translateY(-1px);
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            height: 4px;
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        .step-indicator {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-indicator.completed {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .step-indicator.active {
+            background: #667eea;
+            color: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+        }
+
+        .step-indicator.inactive {
+            background: #e2e8f0;
+            color: #a0aec0;
+        }
+
+        .form-section {
+            background: #ffffff;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #f1f5f9;
+        }
+
+        .section-title {
+            color: #2d3748;
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .field-label {
+            color: #4a5568;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .required {
+            color: #e53e3e;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .error-message {
+            background: linear-gradient(135deg, #f56565, #e53e3e);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 500;
+        }
+        /* In css/style.css or <style> block */
+ /* Insert these new styles */
+    .tab-warning {
+        color: #f56565; /* Red color for visibility */
+        margin-left: 0.5rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+        line-height: 1;
+        display: none; /* Hidden by default */
+    }
+
+    /* Show the warning when the tab has the 'needs-attention' class (added by the script) */
+    .tab.needs-attention .tab-warning {
+        display: inline-block;
+    }
+    </style>
+</head>
+<body class="p-4">
+    <div class="container">
+        <button type="button" class="btn-secondary" onclick="goToHome()">
+  ← Back to Home
+</button>
+
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">College Admission Portal</h1>
+            <p class="text-blue-100 text-lg">Complete your application in simple steps</p>
+        </div>
+
+        <!-- Main Application Card
+        <div class="main-card p-8">
+            Progress Indicator 
+            <div class="mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="step-indicator active" id="step-1-indicator">1</div>
+                        <span class="text-sm font-medium text-gray-600">Personal Info</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="step-indicator inactive" id="step-2-indicator">2</div>
+                        <span class="text-sm font-medium text-gray-400">Academic</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="step-indicator inactive" id="step-3-indicator">3</div>
+                        <span class="text-sm font-medium text-gray-400">Documents</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="step-indicator inactive" id="step-4-indicator">4</div>
+                        <span class="text-sm font-medium text-gray-400">Review</span>
+                    </div>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-1">
+                    <div class="progress-bar w-1/4"></div>
+                </div>
+            </div> -->
+
+            <!-- Tab Navigation -->
+            <div class="main-card p-8">
+    <button class="tab active" id="tab-personal" disabled>
+        Personal Information
+        <span class="tab-warning">!</span>
+    </button>
+    <button class="tab" id="tab-academic" disabled>
+        Academic Background
+        <span class="tab-warning">!</span>
+    </button>
+    <button class="tab" id="tab-documents" disabled>
+        Documents
+        <span class="tab-warning">!</span>
+    </button>
+    <button class="tab" id="tab-review" disabled>
+        Review & Submit
+        <span class="tab-warning">!</span>
+    </button>
+</div><br><br>
+
+            <!-- Tab Content -->
+            <div id="personal" class="tab-content">
+                <div class="form-section">
+                    <h3 class="section-title">Basic Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="field-label">First Name <span class="required">*</span></label>
+                            <input type="text" class="form-field" id="firstName" placeholder="Enter your first name" required>
+                        </div>
+                        <div>
+                            <label class="field-label">Last Name <span class="required">*</span></label>
+                            <input type="text" class="form-field" id="lastName" placeholder="Enter your last name" required>
+                        </div>
+<div>
+    <label for="dateOfBirth" class="form-label">Date of Birth <span class="text-red-500">*</span></label>
+    <input type="text" id="dateOfBirth" class="form-input border border-gray-290" required >
+    <p class="text-xs text-gray-500 mt-1">Applicants must be 16 years or older.</p>
+</div>
+                        <div>
+                            <label class="field-label">Gender <span class="required">*</span></label>
+                            <select class="form-field" id="gender" required>
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                                <option value="prefer-not-to-say">Prefer not to say</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">Contact Information</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="field-label">Email Address <span class="required">*</span></label>
+                            <input type="email" class="form-field" id="email" placeholder="your.email@example.com" required>
+                        </div>
+                        <div>
+                            <label class="field-label">Phone Number <span class="required">*</span></label>
+                            <input type="tel" class="form-field" id="phone" placeholder="+1 (555) 123-4567" required>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="field-label">Address <span class="required">*</span></label>
+                            <input type="text" class="form-field" id="address" placeholder="Street address" required>
+                        </div>
+                        <div>
+                            <label class="field-label">City <span class="required">*</span></label>
+                            <input type="text" class="form-field" id="city" placeholder="City" required>
+                        </div>
+                        <div>
+                            <label class="field-label">State/Province <span class="required">*</span></label>
+                            <input type="text" class="form-field" id="stateProvince" placeholder="State or Province" required>
+                        </div>
+                        <div>
+                            <label class="field-label">ZIP/Postal Code <span class="required">*</span></label>
+                            <input type="text" class="form-field" id="zipPostalCode" placeholder="ZIP or Postal Code" required>
+                        </div>
+                        <div>
+                            <label class="field-label">Country <span class="required">*</span></label>
+                            <select class="form-field" id="country" required>
+                                <option value="">Select country</option>    
+                                <option value="in">India</option>
+                                <option value="us">United States</option>
+                                <option value="ca">Canada</option>
+                                <option value="uk">United Kingdom</option>
+                                <option value="au">Australia</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mt-8">
+                    <button class="btn-secondary" disabled>Previous</button>
+                    <button class="btn-primary" onclick="nextTab('academic')">Continue to Academic Background</button>
+                </div>
+            </div>
+
+            <div id="academic" class="tab-content hidden">
+                <div class="form-section">
+                    <h3 class="section-title">Educational Background</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="field-label">High School Name <span class="required">*</span></label>
+                            <input type="text" class="form-field" id="highSchoolName" placeholder="Name of your high school" required>
+                        </div>
+                        <div>
+                            <label class="field-label">Graduation Year <span class="required">*</span></label>
+                            <select class="form-field" id="graduationYear" required>
+                                <option value="">Select year</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                                <option value="2020">2020</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="field-label">GPA <span class="required">*</span></label>
+                            <input type="number" class="form-field" id="gpa" placeholder="4.0" min="0" max="4" step="0.01" required>
+                        </div>
+                        <div>
+                            <label class="field-label">SAT Score</label>
+                            <input type="number" class="form-field" id="satScore" placeholder="1600" min="400" max="1600">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">Program Selection</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="field-label">Intended Major <span class="required">*</span></label>
+                            <select class="form-field" id="intendedMajor" required>
+                                <option value="">Select major</option>
+                                <option value="computer-science">Computer Science</option>
+                                <option value="engineering">Engineering</option>
+                                <option value="business">Business Administration</option>
+                                <option value="psychology">Psychology</option>
+                                <option value="biology">Biology</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="field-label">Admission Term <span class="required">*</span></label>
+                            <select class="form-field" id="admissionTerm" required>
+                                <option value="">Select term</option>
+                                <option value="fall-2024">Fall 2024</option>
+                                <option value="spring-2025">Spring 2025</option>
+                                <option value="summer-2025">Summer 2025</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mt-8">
+                    <button class="btn-secondary" onclick="previousTab('personal')">Previous</button>
+                    <button class="btn-primary" onclick="nextTab('documents')">Continue to Documents</button>
+                </div>
+            </div>
+
+            <div id="documents" class="tab-content hidden">
+                <div class="form-section">
+                    <h3 class="section-title">Required Documents</h3>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="field-label">Official Transcript <span class="required">*</span></label>
+                            <input type="file" class="form-field" id="transcript" accept=".pdf,.doc,.docx" required>
+                            <p class="text-sm text-gray-500 mt-1">Upload your official high school transcript (PDF, DOC, or DOCX)</p>
+                        </div>
+                        <div>
+                            <label class="field-label">Personal Statement <span class="required">*</span></label>
+                            <input type="file" class="form-field" id="personalStatement" accept=".pdf,.doc,.docx" required>
+                            <p class="text-sm text-gray-500 mt-1">Upload your personal statement or essay (PDF, DOC, or DOCX)</p>
+                        </div>
+                        <div>
+                            <label class="field-label">Letters of Recommendation</label>
+                            <input type="file" class="form-field" id="recommendationLetters" accept=".pdf,.doc,.docx" multiple>
+                            <p class="text-sm text-gray-500 mt-1">Upload 1-3 letters of recommendation (PDF, DOC, or DOCX)</p>
+                        </div>
+                        <div>
+                            <label class="field-label">Additional Documents</label>
+                            <input type="file" class="form-field" id="additionalDocuments" accept=".pdf,.doc,.docx,.jpg,.png" multiple>
+                            <p class="text-sm text-gray-500 mt-1">Any additional supporting documents (certificates, awards, etc.)</p>
+                                                    </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center mt-8">
+                    <button class="btn-secondary" onclick="previousTab('academic')">Previous</button>
+                    <button class="btn-primary" onclick="nextTab('review')">Continue to Review</button>
+                </div>
+            </div>
+
+            <div id="review" class="tab-content hidden">
+                <div class="form-section">
+                    <h3 class="section-title">Application Review</h3>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold text-blue-800 mb-2">📋 Review Your Information</h4>
+                        <p class="text-blue-700">Please review all the information you've provided before submitting your application. You can go back to any previous section to make changes.</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-green-400 pl-4">
+                            <h5 class="font-medium text-gray-800">✅ Personal Information</h5>
+                            <p class="text-sm text-gray-600">Basic and contact information completed</p>
+                        </div>
+                        <div class="border-l-4 border-green-400 pl-4">
+                            <h5 class="font-medium text-gray-800">✅ Academic Background</h5>
+                            <p class="text-sm text-gray-600">Educational history and program selection completed</p>
+                        </div>
+                        <div class="border-l-4 border-green-400 pl-4">
+                            <h5 class="font-medium text-gray-800">✅ Documents</h5>
+                            <p class="text-sm text-gray-600">Required documents uploaded</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-6">
+                        <h4 class="font-semibold text-yellow-800 mb-2">⚠️ Important Notice</h4>
+                        <p class="text-yellow-700">Once you submit your application, you will not be able to make changes. Please ensure all information is accurate and complete.</p>
+                    </div>
+                </div>
+                <!-- Duplicate email error (hidden by default) -->
+<div id="duplicateEmailAlert" class="hidden mb-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+  <!-- text filled from JS -->
+</div>
+
+
+                <div class="flex justify-between items-center mt-8">
+                    <button class="btn-secondary" onclick="previousTab('documents')">Previous</button>
+                    <button class="btn-primary" id="submitButton" onclick="submitApplication()">Submit Application</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+   const API_URL = "http://127.0.0.1:6060/api/applications";
+
+    
+    let currentStep = 1;
+    const totalSteps = 4;
+    // Global constant for minimum age validation
+const MINIMUM_AGE = 16; // Set the required minimum age
+// ====== NEW: LocalStorage helpers + ID generator ======
+function loadApplications() {
+    const data = localStorage.getItem("applications");
+    return data ? JSON.parse(data) : [];
+}
+
+function saveApplications(apps) {
+    localStorage.setItem("applications", JSON.stringify(apps));
+}
+
+function goToEmailStep() {
+  // Switch tab exactly the same way your system does
+  currentStep = 1;                  // 1 = Personal tab in your system
+  showTabByName('personal');        // uses your UI navigation logic
+  updateProgress();                 // updates progress bar + tab highlights
+
+  // Hide duplicate alert if exists
+  const alertBox = document.getElementById("duplicateEmailAlert");
+  if (alertBox) alertBox.classList.add("hidden");
+
+  // Scroll nicely
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// Generate simple Application ID like GU2025-00001
+function generateApplicationId() {
+    const apps = loadApplications();
+    const nextNumber = apps.length + 1;
+    return "GU2025-" + String(nextNumber).padStart(5, "0");
+}
+// ======================================================
+
+// Helper function to check if a date meets the minimum age requirement
+function isMinimumAgeMet(birthDateString, requiredAge) {
+    if (!birthDateString) return false;
+    
+    const birthDate = new Date(birthDateString);
+    const today = new Date();
+    
+    // Calculate the date the applicant would turn the minimum required age
+    const minimumValidDate = new Date(birthDate.getFullYear() + requiredAge, birthDate.getMonth(), birthDate.getDate());
+    
+    // If the minimum valid date is in the past or is today, the age is met.
+    return today >= minimumValidDate;
+}
+
+function nextTab(tabName) {
+    // CRITICAL: Enable warnings ONLY when the user tries to proceed
+    if (currentStep === 1) {
+        warningsEnabled = true;
+    }
+
+    // 1. Validate the CURRENT step before moving
+    if (!validateStep(currentStep)) {
+        // If validation fails, stay on the current step and show the error on the current tab
+        alert('Please fill out all required fields in the current section before continuing.');
+        updateTabWarnings();
+        return;
+    }
+
+    // If validation passes, proceed to the next step
+    if (currentStep < totalSteps) {
+        currentStep++;
+        updateProgress();
+        enableTab(tabName);
+        showTabByName(tabName);
+        
+        // 🌟 NEW: If we just moved to the Review step, restore its content 🌟
+        if (currentStep === totalSteps) {
+            restoreReviewTab(); 
+        }
+    }
+    
+    // Update warnings after successful transition
+    updateTabWarnings();
+}
+    function previousTab(tabName) {
+        if (currentStep > 1) {
+            currentStep--;
+            updateProgress();
+            showTabByName(tabName);
+        }
+        // Always run validation check when moving back to show current status
+        updateTabWarnings();
+    }
+
+    function updateProgress() {
+        // Update progress bar
+        const progressBar = document.querySelector('.progress-bar');
+        const progressWidth = (currentStep / totalSteps) * 100;
+        progressBar.style.width = progressWidth + '%';
+        
+        // Update step indicators
+        const stepIndicators = document.querySelectorAll('.step-indicator');
+        stepIndicators.forEach((indicator, index) => {
+            const stepNumber = index + 1;
+            indicator.classList.remove('completed', 'active', 'inactive');
+            
+            if (stepNumber < currentStep) {
+                indicator.classList.add('completed');
+            } else if (stepNumber === currentStep) {
+                indicator.classList.add('active');
+            } else {
+                indicator.classList.add('inactive');
+            }
+        });
+
+        // Enable/Disable "Previous" button based on step
+        const prevButton = document.querySelector(`#${getTabNameByStep(currentStep)} .btn-secondary`);
+        if (prevButton) {
+            prevButton.disabled = currentStep === 1;
+        }
+
+        // IMPORTANT: We REMOVE the updateTabWarnings() call from here
+        // It is now called explicitly in nextTab() and previousTab().
+}
+    function showTabByName(tabName) {
+        // Hide all tab contents
+        const contents = document.querySelectorAll('.tab-content');
+        contents.forEach(content => content.classList.add('hidden'));
+        
+        // Show selected tab content
+        document.getElementById(tabName).classList.remove('hidden');
+        
+        // Update tab buttons
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        
+        const targetTab = document.getElementById(`tab-${tabName}`);
+        if (targetTab) {
+            targetTab.classList.add('active');
+        }
+    }
+
+    function enableTab(tabName) {
+        const targetTab = document.getElementById(`tab-${tabName}`);
+        if (targetTab) {
+            targetTab.disabled = false;
+        }
+    }
+
+ function updateProgress() {
+    // ... (rest of the progress bar and step indicator logic)
+
+    // Enable/Disable "Previous" button based on step
+    const prevButton = document.querySelector(`#${getTabNameByStep(currentStep)} .btn-secondary`);
+    if (prevButton) {
+        prevButton.disabled = currentStep === 1;
+    }
+
+    // IMPORTANT: REMOVE this line or comment it out!
+    // updateTabWarnings(); 
+}
+    
+    // NEW FUNCTION: Check and update the warning status of all tabs
+   // Add this new global variable at the very top of your script (before any functions)
+let warningsEnabled = false;
+
+// ... (rest of your functions) ...
+
+// REVISED FUNCTION: Check and update the warning status of all tabs
+function updateTabWarnings() {
+    // 🌟 If warnings are not enabled yet, exit immediately
+    if (!warningsEnabled) {
+        return;
+    }
+
+    for (let step = 1; step <= totalSteps; step++) {
+        const tabName = getTabNameByStep(step);
+        const tabButton = document.getElementById(`tab-${tabName}`);
+        
+        if (!tabButton) continue;
+
+        // Only check validation for steps the user has access to or is currently on
+        const isAccessible = step <= currentStep || !tabButton.disabled;
+        
+        if (isAccessible && !validateStep(step)) {
+            tabButton.classList.add('needs-attention');
+        } else {
+            tabButton.classList.remove('needs-attention');
+        }
+    }
+}
+    // REVISED FUNCTION: Checks required fields for any given step number
+// REVISED FUNCTION: Checks required fields for any given step number
+function validateStep(stepNumber) {
+    const tabId = getTabNameByStep(stepNumber);
+    const formContent = document.getElementById(tabId);
+    
+    if (!formContent) return true;
+
+    // Find all required fields within the specified tab
+    const requiredFields = formContent.querySelectorAll('[required]');
+    
+    for (let field of requiredFields) {
+        if (field.type === 'file') {
+            // Check if file is required and not selected (transcript/statement)
+            if ((field.id === 'transcript' || field.id === 'personalStatement') && field.files.length === 0) {
+                return false; 
+            }
+        } else if (!field.value || field.value.trim() === '') {
+            // Check if text/select fields are empty
+            return false; 
+        }
+    }
+    
+    // 🌟 AGE LIMIT CHECK (SPECIFIC TO STEP 1: PERSONAL INFORMATION) 🌟
+    if (stepNumber === 1) {
+        const dateOfBirth = document.getElementById('dateOfBirth').value;
+        if (dateOfBirth && !isMinimumAgeMet(dateOfBirth, MINIMUM_AGE)) {
+            // If the field is filled but the minimum age is not met
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+
+    // Helper to get tab name from current step number
+    function getTabNameByStep(step) {
+        switch(step) {
+            case 1: return 'personal';
+            case 2: return 'academic';
+            case 3: return 'documents';
+            case 4: return 'review';
+            default: return 'personal';
+        }
+    }
+    
+    // Helper to get step number from tab name
+    function getStepByTabName(tabName) {
+        switch(tabName) {
+            case 'personal': return 1;
+            case 'academic': return 2;
+            case 'documents': return 3;
+            case 'review': return 4;
+            default: return 1;
+        }
+    }
+
+
+    // Function to handle input changes and update warnings dynamically
+   // document.addEventListener('input', updateTabWarnings);
+   // document.addEventListener('change', updateTabWarnings);
+
+
+async function submitApplication() {
+    const submitButton = document.getElementById('submitButton');
+    const reviewContent = document.getElementById('review');
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Submitting...';
+
+    // Collect all form data
+    const formData = {
+        personalInfo: {
+            firstName: document.getElementById('firstName').value.trim(),
+            lastName: document.getElementById('lastName').value.trim(),
+            dateOfBirth: document.getElementById('dateOfBirth').value,
+            gender: document.getElementById('gender').value,
+        },
+        contactInfo: {
+            email: document.getElementById('email').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            address: document.getElementById('address').value.trim(),
+            city: document.getElementById('city').value.trim(),
+            stateProvince: document.getElementById('stateProvince').value.trim(),
+            zipPostalCode: document.getElementById('zipPostalCode').value.trim(),
+            country: document.getElementById('country').value.trim(),
+        },
+        academicBackground: {
+            highSchoolName: document.getElementById('highSchoolName').value.trim(),
+            graduationYear: parseInt(document.getElementById('graduationYear').value),
+            gpa: parseFloat(document.getElementById('gpa').value),
+            satScore: document.getElementById('satScore').value
+                ? parseInt(document.getElementById('satScore').value)
+                : undefined,
+        },
+        programSelection: {
+            intendedMajor: document.getElementById('intendedMajor').value,
+            admissionTerm: document.getElementById('admissionTerm').value,
+        },
+        documents: {
+            isTranscriptUploaded: !!document.getElementById('transcript').files.length,
+            isStatementUploaded: !!document.getElementById('personalStatement').files.length,
+        }
+    };
+
+    // STEP 1: step-level validation
+    let isFormComplete = true;
+    for (let i = 1; i < totalSteps; i++) {
+        if (!validateStep(i)) {
+            isFormComplete = false;
+            break;
+        }
+    }
+
+    if (!isFormComplete) {
+        let errorMessageHtml = `
+            <p class="text-lg mb-4">The application failed final validation:</p>
+            <p class="text-sm mb-2">Some required fields are missing in one or more sections.</p>
+            <p class="text-sm">Please review the tabs marked with <span class="font-bold">!</span> and complete all required fields.</p>
+        `;
+
+        reviewContent.innerHTML = `
+            <div class="text-center py-12">
+                <div class="error-message">
+                    <h3 class="text-2xl font-bold mb-2">❌ Application Submission Failed!</h3>
+                    ${errorMessageHtml}
+                    <p class="mt-4 text-sm opacity-90">Please correct the errors and try again.</p>
+                </div>
+                <div class="mt-8">
+                    <button class="btn-primary" onclick="currentStep = 1; updateProgress(); showTabByName('personal');">
+                        Go Back / Correct Errors
+                    </button>
+                </div>
+            </div>
+        `;
+
+        currentStep = totalSteps;
+        updateProgress();
+        updateTabWarnings();
+
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Application';
+        return;
+    }
+
+    // STEP 2: field-level validations
+    const errors = [];
+    let firstFailingTab = null;
+
+    function addError(message, tabLabel) {
+        errors.push(message);
+        if (!firstFailingTab && tabLabel) {
+            firstFailingTab = tabLabel;
+        }
+    }
+
+    // Email
+    const email = formData.contactInfo.email;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) addError("Email address is required.", "Personal Information");
+    else if (!emailRegex.test(email)) addError("Please enter a valid email address.", "Personal Information");
+
+    // Phone with optional country code
+    const phone = formData.contactInfo.phone;
+    const phoneRegex = /^(\+?\d{1,3}[-\s]?)?\d{10}$/;
+    if (!phone) addError("Phone number is required.", "Personal Information");
+    else if (!phoneRegex.test(phone))
+        addError("Phone must be 10 digits with optional country code (e.g. 9876543210 or +91 9876543210).", "Personal Information");
+
+    // GPA
+    const gpa = formData.academicBackground.gpa;
+    if (isNaN(gpa)) addError("GPA is required and must be a number.", "Academic Background");
+    else if (gpa < 0 || gpa > 4) addError("GPA must be between 0.00 and 4.00.", "Academic Background");
+
+    // SAT
+    const satRaw = document.getElementById('satScore').value;
+    if (satRaw) {
+        const sat = formData.academicBackground.satScore;
+        if (isNaN(sat)) addError("SAT score must be a number.", "Academic Background");
+        else if (sat < 400 || sat > 1600) addError("SAT score must be between 400 and 1600.", "Academic Background");
+    }
+
+    // ZIP
+    const zip = formData.contactInfo.zipPostalCode;
+    if (zip && zip.length < 4) addError("ZIP / Postal Code looks too short. Please check it.", "Personal Information");
+
+    if (errors.length > 0) {
+        let errorMessageHtml = `
+            <p class="text-lg mb-4">The application failed final validation:</p>
+            <ul class="list-disc list-inside text-left mx-auto max-w-sm">
+                ${errors.map(msg => `<li class="text-sm text-yellow-100 font-medium">${msg}</li>`).join("")}
+            </ul>
+        `;
+        if (firstFailingTab) {
+            errorMessageHtml += `
+                <p class="mt-4 text-sm text-yellow-100 font-bold">
+                    Hint: Check the ${firstFailingTab} section for corrections.
+                </p>`;
+        }
+
+        reviewContent.innerHTML = `
+            <div class="text-center py-12">
+                <div class="error-message">
+                    <h3 class="text-2xl font-bold mb-2">❌ Application Submission Failed!</h3>
+                    ${errorMessageHtml}
+                    <p class="mt-4 text-sm opacity-90">Please correct the errors and try again.</p>
+                </div>
+                <div class="mt-8">
+                    <button class="btn-primary" onclick="currentStep = 1; updateProgress(); showTabByName('personal');">
+                        Go Back / Correct Errors
+                    </button>
+                </div>
+            </div>
+        `;
+
+        currentStep = totalSteps;
+        updateProgress();
+        updateTabWarnings();
+
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Application';
+        return;
+    }
+
+    // STEP 3: send to backend
+// 🌟 STEP 3: send to backend
+try {
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ formData })
+    });
+
+    // Try to parse JSON even on error (409, 500, etc.)
+    let result = {};
+    try {
+        result = await response.json();
+    } catch (e) {
+        // ignore JSON parse error, will handle with generic message
+        result = {};
+    }
+
+    // 🔁 DUPLICATE EMAIL HANDLING (HTTP 409)
+if (response.status === 409) {
+    const existingId = result.applicationId || "Not available";
+
+    reviewContent.innerHTML = `
+      <div class="text-center py-12">
+        <div class="error-message">
+          <h3 class="text-2xl font-bold mb-2">⚠️ Duplicate Email Found!</h3>
+          <p class="text-lg">This email has already been used to submit an application:</p>
+          <p class="mt-2 text-yellow-100 text-lg font-mono">${formData.contactInfo.email}</p>
+          <p class="mt-4 text-sm opacity-90">
+            Existing Application ID:<br>
+            <span class="font-mono text-base">${existingId}</span>
+          </p>
+          <p class="mt-4 text-xs opacity-80">
+            You can check the status of this application using the Application ID on the status page,
+            or change your email and submit a new application.
+          </p>
+        </div>
+        <div class="mt-8 flex flex-col items-center gap-3">
+          <button class="btn-primary" onclick="location.href='status-checker.html'">
+            Go to Status Checker
+          </button>
+       <button type="button" class="btn-primary" onclick="goToEmailStep()">
+  Submit with a Different Email
+</button>
+        </div>
+      </div>
+    `;
+
+    // keep user on Review step, but re-enable button
+    submitButton.disabled = false;
+    submitButton.textContent = 'Submit Application';
+    return;
+}
+
+    // Any other server error (500, validation, etc.)
+    if (!response.ok || !result.success) {
+        throw new Error(result.message || "Server error");
+    }
+
+    // ✅ SUCCESS – application created
+    const appId = result.applicationId;
+
+    reviewContent.innerHTML = `
+        <div class="text-center py-12">
+            <div class="success-message">
+                <h3 class="text-2xl font-bold mb-2">🎉 Application Submitted Successfully!</h3>
+                <p class="text-lg">Thank you for your application.</p>
+                <p class="mt-4 text-sm opacity-90">
+                    Your Application ID:<br>
+                    <span class="font-mono text-lg">${appId}</span>
+                </p>
+                <p class="mt-2 text-xs opacity-75">
+                    Please note this ID to check your status later.
+                </p>
+            </div>
+            <div class="mt-8">
+                <button class="btn-primary" onclick="location.reload()">Submit Another Application</button>
+            </div>
+        </div>
+    `;
+
+    currentStep = totalSteps;
+    updateProgress();
+
+} catch (error) {
+    console.error("Error submitting application:", error);
+    reviewContent.innerHTML = `
+        <div class="text-center py-12">
+            <div class="error-message">
+                <h3 class="text-2xl font-bold mb-2">❌ Error Submitting Application!</h3>
+                <p class="text-lg">We could not submit your application.</p>
+                <p class="mt-4 text-sm opacity-90">Error: ${error.message}</p>
+            </div>
+            <div class="mt-8">
+                <button class="btn-primary" onclick="location.reload()">Try Again</button>
+            </div>
+        </div>
+    `;
+    currentStep = totalSteps;
+    updateProgress();
+} finally {
+    submitButton.disabled = false;
+    submitButton.textContent = 'Submit Application';
+}
+
+}
+// Ensure MINIMUM_AGE is defined at the top of your script (e.g., const MINIMUM_AGE = 18;)
+
+// Replace your existing setDateConstraints() function with this:
+
+function initializeDatepicker() {
+    const today = new Date();
+    
+    // Calculate the latest allowed date (18 years ago)
+    const maxAllowedDate = new Date();
+    maxAllowedDate.setFullYear(today.getFullYear() - MINIMUM_AGE);
+
+    flatpickr("#dateOfBirth", {
+        dateFormat: "Y-m-d", // Matches the standard HTML date format
+        altInput: true,
+        altFormat: "F j, Y", // Optional: A more readable format in the input box
+        
+        // Disable future dates and dates that violate the 18-year minimum age rule
+        maxDate: maxAllowedDate, 
+        
+        // Set the earliest selectable date (for performance)
+        minDate: today.getFullYear() - 100 // Allows selection 100 years back
+    });
+}
+
+// 🌟 IMPORTANT: Update your initialization calls at the bottom of the script:
+// Find the bottom of your script and replace setDateConstraints()
+// with initializeDatepicker():
+// New function to restore the Review tab's original HTML structure
+function restoreReviewTab() {
+    const reviewContent = document.getElementById('review');
+    
+    // Restore the standard Review tab structure
+    reviewContent.innerHTML = `
+        <h3 class="text-xl font-semibold mb-4 text-gray-700">Review Application</h3>
+        <p class="mb-6 text-gray-600">Please review all your details below before submitting the application.</p>
+        
+        <div id="applicationSummary" class="border rounded-lg p-4 bg-gray-50 mb-6">
+            <p class="text-gray-500 italic">Summary data will be generated here.</p>
+        </div>
+        
+        <div class="flex justify-between mt-8">
+            <button class="btn-secondary" onclick="previousTab('documents')">Previous</button>
+            <button id="submitButton" class="btn-primary" onclick="submitApplication()">Submit Application</button>
+        </div>
+    `;
+     // 🌟 NEW CALL: Generate the summary data
+    generateSummary();
+
+    const submitButton = document.getElementById('submitButton');
+    if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Submit Application';
+    }
+}
+function goToHome() {
+  window.location.href = "index.html";
+}
+
+// New function to gather and display all form data
+function generateSummary() {
+    const summaryDiv = document.getElementById('applicationSummary');
+    if (!summaryDiv) return;
+    
+    // Helper to safely get value or 'N/A'
+    const getValue = (id) => document.getElementById(id)?.value || 'N/A';
+    const getFileStatus = (id) => document.getElementById(id)?.files.length > 0 ? 'Uploaded ✅' : 'Missing ❌';
+
+    let summaryHTML = `
+        <h4 class="text-lg font-bold mb-3 border-b pb-1 text-indigo-700">Personal & Contact Information</h4>
+        <div class="grid grid-cols-2 gap-x-6 gap-y-2 mb-4 text-sm">
+            <div><strong class="font-medium">Name:</strong> ${getValue('firstName')} ${getValue('lastName')}</div>
+            <div><strong class="font-medium">Date of Birth:</strong> ${getValue('dateOfBirth')}</div>
+            <div><strong class="font-medium">Gender:</strong> ${getValue('gender')}</div>
+            <div><strong class="font-medium">Email:</strong> ${getValue('email')}</div>
+            <div><strong class="font-medium">Phone:</strong> ${getValue('phone')}</div>
+            <div><strong class="font-medium">Country:</strong> ${getValue('country')}</div>
+            <div><strong class="font-medium">State:</strong> ${getValue('stateProvince')}</div>
+            <div><strong class="font-medium">Address:</strong> ${getValue('address')}, ${getValue('city')} ${getValue('zipPostalCode')}</div>
+        </div>
+
+        <h4 class="text-lg font-bold mb-3 border-b pb-1 text-indigo-700">Academic Background</h4>
+        <div class="grid grid-cols-2 gap-x-6 gap-y-2 mb-4 text-sm">
+            <div><strong class="font-medium">High School:</strong> ${getValue('highSchoolName')}</div>
+            <div><strong class="font-medium">Graduation Year:</strong> ${getValue('graduationYear')}</div>
+            <div><strong class="font-medium">GPA:</strong> ${getValue('gpa')}</div>
+            <div><strong class="font-medium">SAT Score:</strong> ${getValue('satScore') || 'N/A'}</div>
+            <div><strong class="font-medium">Intended Major:</strong> ${getValue('intendedMajor')}</div>
+            <div><strong class="font-medium">Admission Term:</strong> ${getValue('admissionTerm')}</div>
+        </div>
+        
+        <h4 class="text-lg font-bold mb-3 border-b pb-1 text-indigo-700">Documents</h4>
+        <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+            <div><strong class="font-medium">Transcript:</strong> ${getFileStatus('transcript')}</div>
+            <div><strong class="font-medium">Personal Statement:</strong> ${getFileStatus('personalStatement')}</div>
+        </div>
+    `;
+
+    summaryDiv.innerHTML = summaryHTML;
+}
+    // Initialize on page load
+    updateProgress();
+    showTabByName('personal');
+    initializeDatepicker();
+</script>
+</body>
+</html>

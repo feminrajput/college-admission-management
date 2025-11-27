@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - Global University Admissions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0f172a;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-slate-900 text-slate-100 flex flex-col">
+    <div class="px-4 py-4 border-b border-slate-800">
+      <h1 class="text-xl font-extrabold text-indigo-300">Global University</h1>
+      <p class="text-xs text-slate-400 mt-1">Admissions Admin Panel</p>
+    </div>
+    <nav class="px-3 py-4 space-y-2 text-sm flex-1">
+      <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-slate-800 text-slate-100">
+        <span>Applications</span>
+        <span class="text-[10px] uppercase tracking-wide bg-indigo-600 px-2 py-0.5 rounded-full">Active</span>
+      </button>
+      
+    </nav>
+    <div class="px-4 py-3 border-t border-slate-800 text-xs text-slate-400">
+      Logged in as <span class="font-semibold text-slate-200">Admin</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 bg-slate-100">
+    <!-- Top bar -->
+    <header class="flex items-center justify-between px-6 py-4 bg-white border-b border-slate-200">
+      <div>
+        <h2 class="text-lg font-semibold text-slate-900">Applications</h2>
+        <p class="text-xs text-slate-500">Approve, reject, or raise queries on submitted applications.</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="text-xs text-indigo-600 hover:underline">Back to Site</a>
+        <button onclick="adminLogout()" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+  Logout
+</button>
+
+      </div>
+    </header>
+
+    <!-- Filters -->
+    <section class="px-6 py-4 bg-slate-50 border-b border-slate-200">
+      <div class="flex flex-col md:flex-row gap-3 md:items-end">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Search by Application ID / Name</label>
+          <input id="searchInput" type="text"
+                 class="w-full md:w-64 px-3 py-1.5 rounded-lg border border-slate-300 text-xs shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                 placeholder="GU2025-00001 / Amit..." />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Filter by Status</label>
+          <select id="statusFilter"
+                  class="w-full md:w-40 px-3 py-1.5 rounded-lg border border-slate-300 text-xs shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+            <option value="ALL">All</option>
+            <option value="Under Review">Under Review</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Query Raised">Query Raised</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Table -->
+    <section class="px-6 py-6">
+      <div class="bg-white rounded-2xl shadow border border-slate-200 overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-full text-xs">
+            <thead class="bg-slate-50 border-b border-slate-200">
+              <tr class="text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wide">
+                <th class="px-4 py-2">Application ID</th>
+                <th class="px-4 py-2">Applicant</th>
+                <th class="px-4 py-2">Program</th>
+                <th class="px-4 py-2">Submitted</th>
+                <th class="px-4 py-2">Status</th>
+                <th class="px-4 py-2">Last Updated</th>
+                <th class="px-4 py-2 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody" class="divide-y divide-slate-100">
+              <!-- Rows inserted via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="mt-3 text-[11px] text-slate-500">
+        NOTE: Data is stored in this browser using localStorage for demo / project use.
+      </p>
+    </section>
+  </main>
+
+  <!-- Query Modal -->
+  <div id="queryModal" class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden">
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-xl border border-slate-200 p-6">
+      <h3 class="text-lg font-semibold text-slate-900 mb-1">Send Query to Applicant</h3>
+      <p class="text-xs text-slate-500 mb-4">
+        Application ID: <span id="modalAppId" class="font-semibold text-slate-800"></span>
+      </p>
+      <label class="block text-xs font-semibold text-slate-700 mb-1">
+        Query / Clarification Required
+      </label>
+      <textarea id="queryText"
+                class="w-full h-24 rounded-lg border border-slate-300 px-3 py-2 text-xs shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="Explain what additional documents or clarification you need from the applicant."></textarea>
+
+      <div class="mt-4 flex justify-end gap-2">
+        <button id="cancelQueryBtn"
+                class="px-3 py-1.5 rounded-lg text-xs border border-slate-300 text-slate-600 hover:bg-slate-50">
+          Cancel
+        </button>
+        <button id="sendQueryBtn"
+                class="px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm">
+          Send Query
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    // ⚠️ Prevent access without login
+if (localStorage.getItem("adminAuth") !== "true") {
+    window.location.href = "admin-login.html";
+}
+
+    // OLD
+// const API_URL = "http://localhost:5050/api/applications";
+
+// NEW
+   const API_URL = "http://127.0.0.1:6060/api/applications";
+
+
+
+  let applications = [];
+
+  const tableBody = document.getElementById("tableBody");
+  const searchInput = document.getElementById("searchInput");
+  const statusFilter = document.getElementById("statusFilter");
+
+  function statusBadge(status) {
+    let base = "inline-flex items-center px-2.5 py-0.5 rounded-full border text-[10px] font-semibold ";
+    switch (status) {
+      case "Approved":
+        return base + "bg-emerald-50 text-emerald-700 border-emerald-200";
+      case "Rejected":
+        return base + "bg-rose-50 text-rose-700 border-rose-200";
+      case "Query Raised":
+        return base + "bg-amber-50 text-amber-700 border-amber-200";
+      default:
+        return base + "bg-sky-50 text-sky-700 border-sky-200";
+    }
+  }
+
+  function formatDate(dateStr) {
+    return dateStr || "-";
+  }
+
+ async function loadApplicationsFromServer() {
+  console.log("🔗 Fetching from:", API_URL);
+  try {
+    const res = await fetch(API_URL);
+    console.log("🔍 Response status:", res.status);
+
+    const data = await res.json();
+    console.log("📦 Response JSON:", data);
+
+    if (!res.ok || !data.success) throw new Error(data.message || "Failed to load applications");
+    applications = data.applications || [];
+    renderTable();
+  } catch (err) {
+    console.error("Error fetching applications:", err);
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="7" class="px-4 py-4 text-center text-xs text-rose-600">
+          Failed to load applications from server. ${err.message}
+        </td>
+      </tr>
+    `;
+  }
+}
+
+  function renderTable() {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    const filterStatus = statusFilter.value;
+
+    tableBody.innerHTML = "";
+
+    applications
+      .filter(app => {
+        const matchesSearch =
+          !searchTerm ||
+          (app.applicationId && app.applicationId.toLowerCase().includes(searchTerm)) ||
+          (app.name && app.name.toLowerCase().includes(searchTerm));
+        const matchesStatus =
+          filterStatus === "ALL" || app.status === filterStatus;
+        return matchesSearch && matchesStatus;
+      })
+      .forEach(app => {
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-50";
+
+        tr.innerHTML = `
+          <td class="px-4 py-2 font-mono text-[11px] text-slate-800">${app.applicationId || "-"}</td>
+          <td class="px-4 py-2 text-[11px] text-slate-800">${app.name || "-"}</td>
+          <td class="px-4 py-2 text-[11px] text-slate-700">${app.program || "-"}</td>
+          <td class="px-4 py-2 text-[11px] text-slate-600">${formatDate(app.submittedOn)}</td>
+          <td class="px-4 py-2 text-[11px]">
+            <span class="${statusBadge(app.status || "Under Review")}">${app.status || "Under Review"}</span>
+          </td>
+          <td class="px-4 py-2 text-[11px] text-slate-600">${formatDate(app.lastUpdated)}</td>
+  <td class="px-4 py-2 text-right text-[11px]">
+    <button class="inline-flex items-center px-2 py-1 rounded-lg border border-slate-200 text-slate-700 hover:bg-slate-50 mr-1"
+            data-action="view" data-id="${app.applicationId}">
+      View
+    </button>
+    <button class="inline-flex items-center px-2 py-1 rounded-lg border border-emerald-200 text-emerald-700 hover:bg-emerald-50 mr-1"
+            data-action="approve" data-id="${app.applicationId}">
+      Approve
+    </button>
+    <button class="inline-flex items-center px-2 py-1 rounded-lg border border-rose-200 text-rose-700 hover:bg-rose-50 mr-1"
+            data-action="reject" data-id="${app.applicationId}">
+      Reject
+    </button>
+    <button class="inline-flex items-center px-2 py-1 rounded-lg border border-amber-200 text-amber-700 hover:bg-amber-50 mr-1"
+            data-action="query" data-id="${app.applicationId}">
+      Query
+    </button>
+    <button class="inline-flex items-center px-2 py-1 rounded-lg border border-rose-300 bg-rose-500 text-white hover:bg-rose-600"
+            data-action="delete" data-id="${app.applicationId}">
+      Delete
+    </button>
+  </td>
+
+        `;
+        tableBody.appendChild(tr);
+      });
+  }
+
+  // ---------- Query Modal ----------
+  const queryModal = document.getElementById("queryModal");
+  const modalAppId = document.getElementById("modalAppId");
+  const queryText = document.getElementById("queryText");
+  const cancelQueryBtn = document.getElementById("cancelQueryBtn");
+  const sendQueryBtn = document.getElementById("sendQueryBtn");
+  let currentQueryAppId = null;
+
+  function openQueryModal(appId) {
+    currentQueryAppId = appId;
+    modalAppId.textContent = appId;
+    queryText.value = "";
+    queryModal.classList.remove("hidden");
+  }
+
+  function closeQueryModal() {
+    currentQueryAppId = null;
+    queryModal.classList.add("hidden");
+  }
+
+  cancelQueryBtn.addEventListener("click", closeQueryModal);
+
+  sendQueryBtn.addEventListener("click", async () => {
+    if (!currentQueryAppId) return;
+    const text = queryText.value.trim();
+    if (!text) {
+      alert("Please enter a query message.");
+      return;
+    }
+    try {
+      const res = await fetch(`${API_URL}/${encodeURIComponent(currentQueryAppId)}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "Query Raised", queryMessage: text })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.message || "Failed to update");
+      await loadApplicationsFromServer();
+      closeQueryModal();
+    } catch (err) {
+      alert("Error sending query: " + err.message);
+    }
+  });
+
+  // ---------- View Modal (NEW) ----------
+  const viewModal = document.createElement("div");
+  viewModal.id = "viewModal";
+  viewModal.className = "fixed inset-0 bg-black/40 flex items-center justify-center z-50 hidden";
+  viewModal.innerHTML = `
+    <div class="bg-white w-full max-w-2xl rounded-2xl shadow-xl border border-slate-200 p-6 max-h-[80vh] overflow-y-auto">
+      <h3 class="text-lg font-semibold text-slate-900 mb-1">Application Details</h3>
+      <p class="text-xs text-slate-500 mb-4">
+        Application ID: <span id="viewAppId" class="font-semibold text-slate-800"></span>
+      </p>
+      <div id="viewContent" class="text-xs space-y-4"></div>
+      <div class="mt-4 flex justify-end gap-2">
+        <button id="closeViewBtn"
+                class="px-3 py-1.5 rounded-lg text-xs border border-slate-300 text-slate-600 hover:bg-slate-50">
+          Close
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(viewModal);
+
+  const closeViewBtn = document.getElementById("closeViewBtn");
+  const viewAppIdSpan = document.getElementById("viewAppId");
+  const viewContentDiv = document.getElementById("viewContent");
+
+  function closeViewModal() {
+    viewModal.classList.add("hidden");
+  }
+
+  closeViewBtn.addEventListener("click", closeViewModal);
+  viewModal.addEventListener("click", (e) => {
+    if (e.target === viewModal) closeViewModal();
+  });
+
+  async function openViewModal(appId) {
+    try {
+      const res = await fetch(`${API_URL}/${encodeURIComponent(appId)}`);
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.message || "Failed to load application");
+
+      const app = data.application;
+      viewAppIdSpan.textContent = app.applicationId;
+
+      const d = app.data || {};
+      const p = d.personalInfo || {};
+      const c = d.contactInfo || {};
+      const a = d.academicBackground || {};
+      const ps = d.programSelection || {};
+      const docs = d.documents || {};
+
+      viewContentDiv.innerHTML = `
+        <div>
+          <h4 class="font-semibold text-slate-800 mb-1">Personal Information</h4>
+          <p><span class="font-semibold">Name:</span> ${p.firstName || ""} ${p.lastName || ""}</p>
+          <p><span class="font-semibold">Date of Birth:</span> ${p.dateOfBirth || "-"}</p>
+          <p><span class="font-semibold">Gender:</span> ${p.gender || "-"}</p>
+        </div>
+
+        <div>
+          <h4 class="font-semibold text-slate-800 mb-1">Contact Information</h4>
+          <p><span class="font-semibold">Email:</span> ${c.email || "-"}</p>
+          <p><span class="font-semibold">Phone:</span> ${c.phone || "-"}</p>
+          <p><span class="font-semibold">Address:</span> ${c.address || "-"}, ${c.city || ""}</p>
+          <p><span class="font-semibold">State/Province:</span> ${c.stateProvince || "-"}</p>
+          <p><span class="font-semibold">ZIP/Postal Code:</span> ${c.zipPostalCode || "-"}</p>
+          <p><span class="font-semibold">Country:</span> ${c.country || "-"}</p>
+        </div>
+
+        <div>
+          <h4 class="font-semibold text-slate-800 mb-1">Academic Background</h4>
+          <p><span class="font-semibold">High School:</span> ${a.highSchoolName || "-"}</p>
+          <p><span class="font-semibold">Graduation Year:</span> ${a.graduationYear || "-"}</p>
+          <p><span class="font-semibold">GPA:</span> ${typeof a.gpa !== "undefined" ? a.gpa : "-"}</p>
+          <p><span class="font-semibold">SAT Score:</span> ${typeof a.satScore !== "undefined" ? a.satScore : "-"}</p>
+        </div>
+
+        <div>
+          <h4 class="font-semibold text-slate-800 mb-1">Program Selection</h4>
+          <p><span class="font-semibold">Intended Major:</span> ${ps.intendedMajor || "-"}</p>
+          <p><span class="font-semibold">Admission Term:</span> ${ps.admissionTerm || "-"}</p>
+        </div>
+
+        <div>
+          <h4 class="font-semibold text-slate-800 mb-1">Documents</h4>
+          <p><span class="font-semibold">Transcript Uploaded:</span> ${docs.isTranscriptUploaded ? "Yes" : "No"}</p>
+          <p><span class="font-semibold">Statement Uploaded:</span> ${docs.isStatementUploaded ? "Yes" : "No"}</p>
+        </div>
+
+        <div>
+          <h4 class="font-semibold text-slate-800 mb-1">Status</h4>
+          <p><span class="font-semibold">Current Status:</span> ${app.status}</p>
+          <p><span class="font-semibold">Last Updated:</span> ${app.lastUpdated}</p>
+          ${app.queryMessage ? `<p class="mt-1 text-amber-700"><span class="font-semibold">Query Message:</span> ${app.queryMessage}</p>` : ""}
+        </div>
+      `;
+
+      viewModal.classList.remove("hidden");
+    } catch (err) {
+      alert("Error loading application details: " + err.message);
+    }
+  }
+
+  // ---------- Table button actions ----------
+  tableBody.addEventListener("click", async (e) => {
+    const btn = e.target.closest("button[data-action]");
+    if (!btn) return;
+    const action = btn.getAttribute("data-action");
+    const id = btn.getAttribute("data-id");
+    if (!id) return;
+
+    if (action === "view") {
+      openViewModal(id);
+      return;
+    }
+
+    if (action === "approve" || action === "reject") {
+      const newStatus = action === "approve" ? "Approved" : "Rejected";
+      try {
+        const res = await fetch(`${API_URL}/${encodeURIComponent(id)}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: newStatus })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || "Failed to update");
+        await loadApplicationsFromServer();
+      } catch (err) {
+        alert("Error updating status: " + err.message);
+      }
+      return;
+    }
+
+    if (action === "query") {
+      openQueryModal(id);
+      return;
+    }
+    if (action === "delete") {
+    deleteApplication(id);
+    return;
+  }
+
+  });
+    
+
+  searchInput.addEventListener("input", renderTable);
+  statusFilter.addEventListener("change", renderTable);
+
+  // Initial load
+  loadApplicationsFromServer();
+
+  function adminLogout() {
+    localStorage.removeItem("adminAuth");
+    window.location.href = "admin-login.html";
+}
+
+
+async function deleteApplication(appId) {
+  const trimmedId = (appId || "").trim();
+
+  if (!trimmedId) {
+    alert("Invalid application ID.");
+    return;
+  }
+
+  if (!confirm(`Are you sure you want to delete Application ID: ${trimmedId}?`)) {
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API_URL}/${encodeURIComponent(trimmedId)}`, {
+      method: "DELETE"
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok || !data.success) {
+      console.error("Delete failed:", res.status, data);
+      alert(`Error deleting application: ${data.message || "Please try again."}`);
+      return;
+    }
+
+    alert("Application deleted successfully!");
+    await loadApplicationsFromServer(); // refresh table
+  } catch (err) {
+    console.error("Delete error:", err);
+    alert("Error deleting application. Check console for details.");
+  }
+}
+
+
+
+</script>
+
+</body>
+</html>

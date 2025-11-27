@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Login | Global University</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+  <div class="bg-white shadow-lg rounded-lg p-8 w-full max-w-sm">
+    <h2 class="text-2xl font-bold text-gray-800 text-center mb-6">Admin Login</h2>
+
+    <!-- Username -->
+    <div>
+      <label class="block text-gray-600 font-semibold mb-1">Username</label>
+      <input
+        type="text"
+        id="adminUser"
+        class="w-full p-2 border rounded"
+        placeholder="Enter Username"
+      >
+    </div>
+
+    <!-- Password with Toggle -->
+    <div class="mt-4 relative">
+      <label class="block text-gray-600 font-semibold mb-1">Password</label>
+      <input
+        type="password"
+        id="adminPass"
+        class="w-full p-2 border rounded pr-10"
+        placeholder="Enter Password"
+      >
+      <!-- Eye Icon -->
+      <span
+        onclick="togglePassword()"
+        class="absolute right-3 top-9 cursor-pointer text-gray-600 select-none"
+        title="Show / hide password"
+      >
+        👁️
+      </span>
+    </div>
+
+    <!-- Error -->
+    <p id="loginError" class="text-red-500 text-sm mt-3 hidden">
+      Invalid username or password!
+    </p>
+
+    <!-- Login Button -->
+    <button
+      onclick="loginAdmin()"
+      class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 mt-6 rounded"
+    >
+      Login
+    </button>
+  </div>
+
+  <script>
+    // static credentials
+    const ADMIN_USER = "admin";
+    const ADMIN_PASS = "admin123";
+
+    // if already logged in, go directly to dashboard
+    document.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("adminAuth") === "true") {
+        window.location.href = "admin-dashboard.html";
+      }
+    });
+
+    function togglePassword() {
+      const pass = document.getElementById("adminPass");
+      pass.type = pass.type === "password" ? "text" : "password";
+    }
+
+    function loginAdmin() {
+      const username = document.getElementById("adminUser").value.trim();
+      const password = document.getElementById("adminPass").value.trim();
+      const errorEl = document.getElementById("loginError");
+
+      if (username === ADMIN_USER && password === ADMIN_PASS) {
+        localStorage.setItem("adminAuth", "true");
+        errorEl.classList.add("hidden");
+        window.location.href = "admin-dashboard.html";
+      } else {
+        errorEl.classList.remove("hidden");
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Check Application Status - Global University</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50">
+  <!-- Top bar -->
+  <nav class="bg-white shadow-md">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="index.html" class="text-xl font-extrabold text-indigo-700 tracking-tight">
+        Global University
+      </a>
+      <a href="application-portal.html"
+         class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 shadow">
+        Apply Now
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <main class="flex-1 flex items-center justify-center px-4 py-10">
+    <div class="w-full max-w-xl bg-white rounded-2xl shadow-lg p-6 md:p-8 border border-slate-100">
+      <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 mb-2 text-center">
+        Check Application Status
+      </h1>
+      <p class="text-slate-600 mb-6 text-center">
+        You can check your status using <span class="font-semibold">Application ID</span> or <span class="font-semibold">Email</span>.
+      </p>
+
+      <!-- Tabs for method selection -->
+      <div class="flex mb-4 rounded-xl border border-slate-200 overflow-hidden text-sm">
+        <button id="tabIdBtn" class="flex-1 py-2 text-center font-medium bg-indigo-600 text-white">
+          By Application ID
+        </button>
+        <button id="tabEmailBtn" class="flex-1 py-2 text-center font-medium bg-white text-slate-700">
+          By Email
+        </button>
+      </div>
+
+      <!-- Form: By Application ID -->
+      <form id="statusFormId" class="space-y-4">
+        <div>
+          <label for="appId" class="block text-sm font-semibold text-slate-700 mb-1">
+            Application ID
+          </label>
+          <input
+            type="text"
+            id="appId"
+            class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="e.g. GU2025-00001"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full inline-flex justify-center items-center px-4 py-2 rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition">
+          Check Status by Application ID
+        </button>
+      </form>
+
+      <!-- Form: By Email (hidden initially) -->
+      <form id="statusFormEmail" class="space-y-4 hidden">
+        <div>
+          <label for="emailInput" class="block text-sm font-semibold text-slate-700 mb-1">
+            Registered Email
+          </label>
+          <input
+            type="email"
+            id="emailInput"
+            class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="you@example.com"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full inline-flex justify-center items-center px-4 py-2 rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md transition">
+          Check Status by Email
+        </button>
+      </form>
+
+      <!-- Result box -->
+      <div id="resultBox" class="mt-6 hidden">
+        <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <h2 class="text-lg font-bold text-slate-900 mb-2">Application Details</h2>
+          <p class="text-sm"><span class="font-semibold text-slate-700">Application ID:</span> <span id="resId"></span></p>
+          <p class="text-sm"><span class="font-semibold text-slate-700">Name:</span> <span id="resName"></span></p>
+          <p class="text-sm"><span class="font-semibold text-slate-700">Program:</span> <span id="resProgram"></span></p>
+          <p class="text-sm"><span class="font-semibold text-slate-700">Submitted On:</span> <span id="resSubmitted"></span></p>
+
+          <div class="mt-3">
+            <span class="font-semibold text-slate-700 text-sm">Current Status:</span>
+            <span id="resStatusBadge"
+                  class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold">
+            </span>
+          </div>
+
+          <p id="resQueryMessage" class="mt-3 text-sm text-amber-700 hidden"></p>
+
+          <p class="mt-4 text-xs text-slate-500">
+            For any questions, contact the Admissions Office at
+            <span class="font-semibold text-indigo-600">admissions@globaluni.edu</span>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Not found message -->
+      <div id="notFoundBox" class="mt-6 hidden">
+        <div class="rounded-xl border border-rose-100 bg-rose-50 p-4">
+          <p class="text-sm font-medium text-rose-700" id="notFoundText">
+            We could not find an application with that ID. Please check your Application ID or contact Admissions.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 text-white text-xs py-4">
+    <div class="max-w-6xl mx-auto px-4 text-center">
+      &copy; 2025 Global University. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+   const API_URL = "http://127.0.0.1:6060/api/applications";
+   
+    function getStatusBadgeClasses(status) {
+      switch (status) {
+        case "Approved":
+          return "bg-emerald-100 text-emerald-800 border border-emerald-200";
+        case "Rejected":
+          return "bg-rose-100 text-rose-800 border border-rose-200";
+        case "Query Raised":
+          return "bg-amber-100 text-amber-800 border border-amber-200";
+        default:
+          return "bg-sky-100 text-sky-800 border border-sky-200";
+      }
+    }
+
+    const tabIdBtn = document.getElementById("tabIdBtn");
+    const tabEmailBtn = document.getElementById("tabEmailBtn");
+    const formId = document.getElementById("statusFormId");
+    const formEmail = document.getElementById("statusFormEmail");
+
+    const resultBox = document.getElementById("resultBox");
+    const notFoundBox = document.getElementById("notFoundBox");
+    const notFoundText = document.getElementById("notFoundText");
+
+    function showIdTab() {
+      tabIdBtn.className = "flex-1 py-2 text-center font-medium bg-indigo-600 text-white";
+      tabEmailBtn.className = "flex-1 py-2 text-center font-medium bg-white text-slate-700";
+      formId.classList.remove("hidden");
+      formEmail.classList.add("hidden");
+      resultBox.classList.add("hidden");
+      notFoundBox.classList.add("hidden");
+    }
+
+    function showEmailTab() {
+      tabEmailBtn.className = "flex-1 py-2 text-center font-medium bg-indigo-600 text-white";
+      tabIdBtn.className = "flex-1 py-2 text-center font-medium bg-white text-slate-700";
+      formEmail.classList.remove("hidden");
+      formId.classList.add("hidden");
+      resultBox.classList.add("hidden");
+      notFoundBox.classList.add("hidden");
+    }
+
+    tabIdBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      showIdTab();
+    });
+
+    tabEmailBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      showEmailTab();
+    });
+
+    function renderApplication(app) {
+      document.getElementById("resId").textContent = app.applicationId || "-";
+      document.getElementById("resName").textContent = app.name || "-";
+      document.getElementById("resProgram").textContent = app.program || "-";
+      document.getElementById("resSubmitted").textContent = app.submittedOn || "-";
+
+      const badge = document.getElementById("resStatusBadge");
+      const status = app.status || "Under Review";
+      badge.textContent = status;
+      badge.className =
+        "ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold " +
+        getStatusBadgeClasses(status);
+
+      const queryP = document.getElementById("resQueryMessage");
+      if (app.queryMessage) {
+        queryP.textContent = "Note from Admissions: " + app.queryMessage;
+        queryP.classList.remove("hidden");
+      } else {
+        queryP.classList.add("hidden");
+      }
+
+      resultBox.classList.remove("hidden");
+      notFoundBox.classList.add("hidden");
+    }
+
+    // By Application ID
+    formId.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const id = document.getElementById("appId").value.trim();
+      resultBox.classList.add("hidden");
+      notFoundBox.classList.add("hidden");
+
+      if (!id) return;
+
+      try {
+        const res = await fetch(`${API_URL}/${encodeURIComponent(id)}`);
+        const data = await res.json();
+
+        if (!res.ok || !data.success || !data.application) {
+          notFoundText.textContent =
+            "We could not find an application with that ID. Please check your Application ID or contact Admissions.";
+          notFoundBox.classList.remove("hidden");
+          return;
+        }
+
+        renderApplication(data.application);
+      } catch (err) {
+        console.error("Error fetching status by ID:", err);
+        notFoundText.textContent = "There was a problem fetching your status. Please try again later.";
+        notFoundBox.classList.remove("hidden");
+      }
+    });
+
+    // By Email
+formEmail.addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const email = document.getElementById("emailInput").value.trim();
+  resultBox.classList.add("hidden");
+  notFoundBox.classList.add("hidden");
+
+  if (!email) return;
+
+  try {
+    const res = await fetch(`${API_URL}/by-email/${encodeURIComponent(email)}`);
+    const data = await res.json();
+
+    console.log("🔍 Email lookup status:", res.status, data);
+
+    if (!res.ok || !data.success || !data.application) {
+      notFoundText.textContent =
+        data.message ||
+        "We could not find an application with that email. Please check your email or contact Admissions.";
+      notFoundBox.classList.remove("hidden");
+      return;
+    }
+
+    renderApplication(data.application);
+  } catch (err) {
+    console.error("Error fetching status by email:", err);
+    notFoundText.textContent = "There was a problem fetching your status. Please try again later.";
+    notFoundBox.classList.remove("hidden");
+  }
+});
+
+
+    // Default tab
+    showIdTab();
+  </script>
+</body>
+</html>

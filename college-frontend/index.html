@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global University - Official Admissions Home</title>
+    <!-- Load Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        /* Custom class for the hero section overlay */
+        .hero-overlay {
+            background-color: rgba(30, 41, 59, 0.7); /* Dark blue overlay */
+        }
+        /* Transition for buttons */
+        .btn-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Style for the professional image */
+        .hero-image {
+            background-image: url('https://images.unsplash.com/photo-1541339907198-e0875663f974?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+    <script>
+        // Simple script for mobile menu toggle
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Close mobile menu after clicking an anchor link
+        document.addEventListener('DOMContentLoaded', () => {
+            const links = document.querySelectorAll('#mobile-menu a');
+            links.forEach(link => {
+                link.addEventListener('click', () => {
+                    const menu = document.getElementById('mobile-menu');
+                    if (!menu.classList.contains('hidden')) {
+                        menu.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white shadow-md sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo/Branding - Link to Home/Top of Page -->
+                <div class="flex-shrink-0">
+                    <a href="#home" class="text-2xl font-extrabold text-indigo-700 tracking-tight">
+                        Global University
+                    </a>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <div class="hidden md:flex md:space-x-4 items-center">
+                    <!-- Anchor links now point to sections on this page -->
+                    <a href="#home" class="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md font-medium">Home</a>
+                    <a href="#academics" class="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md font-medium">Academics</a>
+                    <a href="#admissions" class="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md font-medium">Admissions</a>
+                    <a href="#contact" class="text-gray-600 hover:text-indigo-600 px-3 py-2 rounded-md font-medium">Contact</a>
+
+                    <!-- Action Buttons -->
+                    <div class="space-x-3 ml-4">
+                        <!-- NEW: Check Status Button (Secondary Styling) -->
+                        <a href="status-checker.html" class="inline-flex items-center px-4 py-2 border border-indigo-300 rounded-lg text-sm font-medium text-indigo-700 bg-indigo-50 hover:bg-indigo-100 btn-transition shadow-sm">
+                            Check Status
+                        </a>
+                        <!-- Existing: Log In Button (Secondary Styling) -->
+                        <a href="admin-dashboard.html" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 btn-transition shadow-sm">
+                            Admin Log In
+                        </a>
+                        <!-- Existing: Apply Now Button (Primary Styling) -->
+                        <a href="application-portal.html" class="inline-flex items-center px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 btn-transition shadow-md">
+                            Apply Now
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button type="button" onclick="toggleMenu()" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div class="md:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700">Home</a>
+                <a href="#academics" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700">Academics</a>
+                <a href="#admissions" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700">Admissions</a>
+                <a href="#contact" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700">Contact</a>
+                <!-- NEW: Check Status Link -->
+                <a href="status-checker.html" class="block px-3 py-2 rounded-md text-base font-medium text-indigo-600 hover:bg-indigo-50 hover:text-indigo-700 border-t border-gray-200 mt-2 pt-2">Check Status</a>
+                <a href="login-page.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700">Log In</a>
+                <a href="application-portal.html" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700">Apply Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Home Section (Hero & Features) -->
+        <section id="home">
+            <!-- Hero Section with Image and CTA -->
+            <div class="hero-image h-[400px] md:h-[500px] relative">
+                <div class="hero-overlay absolute inset-0 flex items-center justify-center">
+                    <div class="text-center max-w-4xl px-6">
+                        <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white leading-tight mb-4">
+                            Unlock Your Potential. Apply to Global University Today.
+                        </h1>
+                        <p class="text-lg text-indigo-200 mb-8 max-w-2xl mx-auto">
+                            Join a community of innovators and thought leaders. Our application window is now open for the next academic year.
+                        </p>
+                        <a href="application-portal.html" class="inline-flex items-center px-8 py-3 border border-transparent text-lg font-bold rounded-xl text-indigo-700 bg-white hover:bg-indigo-100 btn-transition shadow-lg transform hover:scale-105">
+                            Start Your Application
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Section: Key Stats and Features -->
+            <div class="py-16 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-3xl font-bold text-gray-800 text-center mb-12">
+                        Why Choose Global University?
+                    </h2>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <!-- Feature 1 -->
+                        <div class="p-6 bg-gray-50 rounded-xl shadow-lg transform hover:shadow-xl btn-transition">
+                            <div class="text-indigo-600 mb-3 mx-auto h-10 w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">World-Class Faculty</h3>
+                            <p class="text-gray-600">Learn from leading experts in fields ranging from Artificial Intelligence to Global History.</p>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="p-6 bg-gray-50 rounded-xl shadow-lg transform hover:shadow-xl btn-transition">
+                            <div class="text-indigo-600 mb-3 mx-auto h-10 w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a8.948 8.948 0 01-4.752-1.21M12 9A8.96 8.96 0 003 12h18m-9-3h-2" /></svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Global Opportunities</h3>
+                            <p class="text-gray-600">Access study abroad programs and international internships across 50+ countries.</p>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="p-6 bg-gray-50 rounded-xl shadow-lg transform hover:shadow-xl btn-transition">
+                            <div class="text-indigo-600 mb-3 mx-auto h-10 w-10">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.003 12.003 0 0012 21c2.253 0 4.385-.583 6.208-1.638a2 2 0 00.91-1.782" /></svg>
+                            </div>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Career Success</h3>
+                            <p class="text-gray-600">Our graduates enjoy a 97% employment rate within six months of commencement.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Academics Section -->
+        <section id="academics" class="py-16 bg-gray-100">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-gray-900 text-center mb-10 border-b pb-2">Academic Programs</h2>
+                <p class="text-lg text-gray-600 text-center mb-12">
+                    Explore our diverse range of cutting-edge programs, designed to equip students with the skills for tomorrow's challenges.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Program Card 1 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl btn-transition">
+                        <h3 class="text-2xl font-bold text-indigo-700 mb-2">School of Engineering & Technology</h3>
+                        <p class="text-gray-700 mb-4">Focus areas: Computer Science, Mechanical Engineering, Biomedical Innovation. Research-intensive and project-based learning.</p>
+                        <a href="javascript:void(0)" class="text-indigo-600 font-semibold hover:text-indigo-800">View Departments &rarr;</a>
+                    </div>
+
+                    <!-- Program Card 2 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl btn-transition">
+                        <h3 class="text-2xl font-bold text-indigo-700 mb-2">College of Arts & Humanities</h3>
+                        <p class="text-gray-700 mb-4">Focus areas: Global History, Modern Languages, Creative Writing, and Philosophy. Fostering critical thinking and communication.</p>
+                        <a href="javascript:void(0)" class="text-indigo-600 font-semibold hover:text-indigo-800">View Departments &rarr;</a>
+                    </div>
+                </div>
+                <div class="text-center mt-10">
+                    <a href="javascript:void(0)" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-indigo-700 bg-indigo-200 hover:bg-indigo-300 btn-transition shadow-md">
+                        Download Full Program Catalog
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Admissions Section -->
+        <section id="admissions" class="py-16 bg-white">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-gray-900 text-center mb-10 border-b pb-2">Undergraduate Admissions</h2>
+                <p class="text-lg text-gray-600 text-center mb-12">
+                    Welcome! We seek creative, ambitious, and diverse students ready to make a difference in the world.
+                </p>
+
+                <div class="space-y-10">
+                    <!-- Section 1: Application Deadlines -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-lg border border-indigo-100">
+                        <h3 class="text-2xl font-bold text-indigo-700 mb-3">Key Dates & Deadlines</h3>
+                        <dl class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700">
+                            <div class="py-2 border-b">
+                                <dt class="font-semibold text-gray-900">Early Decision Deadline:</dt>
+                                <dd>November 1st (Notification by December 15th)</dd>
+                            </div>
+                            <div class="py-2 border-b">
+                                <dt class="font-semibold text-gray-900">Regular Decision Deadline:</dt>
+                                <dd>January 5th (Notification by April 1st)</dd>
+                            </div>
+                            <div class="py-2">
+                                <dt class="font-semibold text-gray-900">Financial Aid Deadline:</dt>
+                                <dd>February 15th</dd>
+                            </div>
+                            <div class="py-2">
+                                <dt class="font-semibold text-gray-900">Enrollment Deposit Due:</dt>
+                                <dd>May 1st</dd>
+                            </div>
+                        </dl>
+                    </div>
+
+                    <!-- Section 2: Required Materials -->
+                    <div class="bg-gray-50 p-6 rounded-xl shadow-lg border border-gray-200">
+                        <h3 class="text-2xl font-bold text-indigo-700 mb-4">Required Application Materials</h3>
+                        <ul class="list-disc list-inside space-y-2 text-gray-700 pl-4">
+                            <li>Completed Online Application (via the Application Portal)</li>
+                            <li>Official High School Transcript</li>
+                            <li>Two Letters of Recommendation (from teachers or counselors)</li>
+                            <li>Personal Essay/Statement of Purpose</li>
+                            <li>Standardized Test Scores (Optional: SAT/ACT)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- CTA Block to Application & Status -->
+                <div class="mt-10 text-center flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <!-- NEW: Status Checker CTA (Secondary CTA) -->
+                    <a href="status-checker.html" class="inline-flex items-center px-10 py-4 border-2 border-indigo-600 text-lg font-bold rounded-xl text-indigo-700 bg-white hover:bg-indigo-50 btn-transition shadow-md transform hover:scale-105 justify-center">
+                        Check Application Status
+                    </a>
+                    <!-- Existing: Apply Now CTA (Primary CTA) -->
+                    <a href="application-portal.html" class="inline-flex items-center px-10 py-4 border border-transparent text-lg font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 btn-transition shadow-lg transform hover:scale-105 justify-center">
+                        Start Your Application Today
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 bg-gray-100">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-gray-900 text-center mb-10 border-b pb-2">Get In Touch</h2>
+                <p class="text-lg text-gray-600 text-center mb-12">
+                    We're here to help! Choose the best way to reach us based on your inquiry type.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <!-- Admissions Contact -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                        <div class="text-indigo-600 mb-3 mx-auto h-10 w-10">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Admissions Office</h3>
+                        <p class="text-gray-600 mb-4">Inquiries about applications, deadlines, and requirements.</p>
+                        <p class="font-medium text-indigo-600">admissions@globaluni.edu</p>
+                        <p class="text-sm text-gray-500">(555) 123-4567</p>
+                    </div>
+
+                    <!-- Academic Contact -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                        <div class="text-indigo-600 mb-3 mx-auto h-10 w-10">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5s3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18s-3.332.477-4.5 1.253" /></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Academic Affairs</h3>
+                        <p class="text-gray-600 mb-4">Questions about course credit, degrees, or departments.</p>
+                        <p class="font-medium text-indigo-600">academicaffairs@globaluni.edu</p>
+                        <p class="text-sm text-gray-500">(555) 987-6543</p>
+                    </div>
+
+                    <!-- General Inquiry Contact -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
+                        <div class="text-indigo-600 mb-3 mx-auto h-10 w-10">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Main Campus Location</h3>
+                        <p class="text-gray-600 mb-4">Visit our beautiful campus or mail official documents.</p>
+                        <p class="font-medium text-indigo-600">123 University Drive, City, 90210</p>
+                        <p class="text-sm text-gray-500">Open M-F, 9am - 5pm</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Quick CTA Bar (Repeating the one from the Home section) -->
+    <div class="bg-indigo-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
+            <h2 class="text-2xl font-bold text-white mb-4 md:mb-0">
+                Ready to Begin Your Future?
+            </h2>
+            <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                <a href="status-checker.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-white bg-indigo-500 hover:bg-indigo-600 btn-transition shadow-md">
+                    Check Status
+                </a>
+                <a href="application-portal.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-semibold rounded-lg text-indigo-700 bg-indigo-100 hover:bg-white btn-transition shadow-md">
+                    Access the Application Portal &rarr;
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>&copy; 2025 Global University. All rights reserved. | <a href="#contact" class="hover:underline">Contact</a> | <a href="javascript:void(0)" class="hover:underline">Privacy Policy</a></p>
+        </div>
+    </footer>
+
+</body>
+</html>
