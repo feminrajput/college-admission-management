@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ApplicationService, Application } from '../../services/application.service';
 import { AuthService } from '../../services/auth.service';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-admin-dashboard',
   imports: [CommonModule, FormsModule, RouterLink],
@@ -204,3 +204,4 @@ export class AdminDashboardComponent implements OnInit {
   getDocUrl(relativePath: string): string {
     return `${environment.staticUrl}${relativePath}`;
   }
+}
