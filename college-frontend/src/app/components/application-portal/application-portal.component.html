@@ -1,0 +1,653 @@
+<div class="p-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <button type="button" class="btn-secondary" (click)="goToHome()">
+      &#8592; Back to Home
+    </button>
+
+    <!-- Header -->
+    <div class="text-center mb-8 mt-4">
+      <h1 class="text-4xl font-bold text-white mb-2">
+        {{ isEditMode ? 'Edit Application' : 'College Admission Portal' }}
+        @if (isEditMode) {
+        <span class="inline-block align-middle ml-2 text-sm font-semibold bg-amber-200 text-amber-900 px-3 py-1 rounded-full shadow-sm">
+          {{ editAppId }}
+        </span>
+        }
+      </h1>
+      <p class="text-blue-100 text-lg">
+        {{ isEditMode ? 'Make the necessary corrections requested by Admissions.' : 'Complete your application in simple steps' }}
+      </p>
+    </div>
+
+    @if (isEditMode && editQueryMessage) {
+    <!-- Query Message Banner -->
+    <div class="main-card p-4 mb-6 border-l-4 border-amber-500 bg-amber-50">
+      <div class="flex gap-3">
+        <svg class="w-6 h-6 text-amber-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        <div>
+          <h3 class="font-bold text-amber-800">Query from Admissions:</h3>
+          <p class="text-amber-700 mt-1">{{ editQueryMessage }}</p>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- Tab Navigation -->
+    <div class="main-card p-8">
+      <button class="tab" [class.active]="currentStep === 1" [disabled]="!isTabAccessible(1)" (click)="goToTab(1)">
+        Personal Information
+        @if (tabWarnings[0]) { <span class="tab-warning">!</span> }
+      </button>
+      <button class="tab" [class.active]="currentStep === 2" [disabled]="!isTabAccessible(2)" (click)="goToTab(2)">
+        Academic Background
+        @if (tabWarnings[1]) { <span class="tab-warning">!</span> }
+      </button>
+      <button class="tab" [class.active]="currentStep === 3" [disabled]="!isTabAccessible(3)" (click)="goToTab(3)">
+        Documents
+        @if (tabWarnings[2]) { <span class="tab-warning">!</span> }
+      </button>
+      <button class="tab" [class.active]="currentStep === 4" [disabled]="!isTabAccessible(4)" (click)="goToTab(4)">
+        Review &amp; Submit
+        @if (tabWarnings[3]) { <span class="tab-warning">!</span> }
+      </button>
+    </div>
+    <br><br>
+
+    <!-- Step 1: Personal Information -->
+    @if (currentStep === 1) {
+    <div class="form-section">
+      <h3 class="section-title">Personal Details (As per HSC Marksheet)</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <label class="field-label">Surname <span class="required">*</span></label>
+          <input type="text" class="form-field" [(ngModel)]="surname" placeholder="e.g. PATEL">
+        </div>
+        <div>
+          <label class="field-label">Student Name <span class="required">*</span></label>
+          <input type="text" class="form-field" [(ngModel)]="firstName" placeholder="e.g. RAJESHBHAI">
+        </div>
+        <div>
+          <label class="field-label">Father/Husband Name <span class="required">*</span></label>
+          <input type="text" class="form-field" [(ngModel)]="fatherName" placeholder="e.g. KUMARBHAI">
+        </div>
+        <div>
+          <label class="field-label">Mother Name <span class="required">*</span></label>
+          <input type="text" class="form-field" [(ngModel)]="motherName" placeholder="e.g. SAVITABEN">
+        </div>
+        <div>
+          <label class="field-label">Date of Birth <span class="required">*</span></label>
+          <!-- Custom date picker trigger -->
+          <div class="relative">
+            <button type="button" (click)="calOpen = !calOpen"
+              class="form-field w-full text-left flex items-center justify-between" [class.border-indigo-500]="calOpen">
+              <span [class.text-slate-400]="!dateOfBirth">{{ calDisplayDate }}</span>
+              <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </button>
+            <!-- Calendar dropdown -->
+            @if (calOpen) {
+            <div class="absolute z-50 mt-1 bg-white border border-slate-200 rounded-xl shadow-xl p-3 w-72">
+              <!-- Month / Year navigation -->
+              <div class="flex items-center justify-between mb-3">
+                <button type="button" (click)="calPrevMonth()"
+                  class="p-1.5 rounded-lg hover:bg-slate-100 text-slate-600 cursor-pointer">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <div class="flex gap-2">
+                  <select
+                    class="text-sm font-semibold text-slate-800 border-0 cursor-pointer focus:ring-0 bg-transparent"
+                    [ngModel]="calMonth"
+                    (change)="onCalMonthChange($any($event.target).value)">
+                    @for (m of MONTHS; track m; let i = $index) {
+                    <option [value]="i">{{ m }}</option>
+                    }
+                  </select>
+                  <input type="number"
+                    class="text-sm font-semibold text-slate-800 border-0 w-16 focus:ring-0 bg-transparent text-center"
+                    [(ngModel)]="calYear" min="1900" [max]="maxCalYear">
+                </div>
+                <button type="button" (click)="calNextMonth()"
+                  [disabled]="calNextDisabled"
+                  class="p-1.5 rounded-lg text-slate-600"
+                  [class.hover:bg-slate-100]="!calNextDisabled"
+                  [class.cursor-pointer]="!calNextDisabled"
+                  [class.opacity-30]="calNextDisabled"
+                  [class.cursor-not-allowed]="calNextDisabled">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+              <!-- Day header -->
+              <div class="grid grid-cols-7 mb-1">
+                @for (d of DAYS; track d) {
+                <div class="text-center text-[10px] font-semibold text-slate-400 py-1">{{ d }}</div>
+                }
+              </div>
+              <!-- Day cells -->
+              <div class="grid grid-cols-7 gap-0.5">
+                @for (day of calDays; track $index) {
+                @if (day) {
+                <button type="button" (click)="calSelectDay(day)"
+                  [disabled]="isDateDisabled(day)"
+                  class="h-8 w-full rounded-lg text-xs font-medium transition-colors"
+                  [class.bg-indigo-600]="isSelectedDay(day)"
+                  [class.text-white]="isSelectedDay(day)"
+                  [class.ring-1]="isToday(day) && !isSelectedDay(day)"
+                  [class.ring-indigo-400]="isToday(day) && !isSelectedDay(day)"
+                  [class.text-slate-700]="!isSelectedDay(day) && !isDateDisabled(day)"
+                  [class.hover:bg-indigo-50]="!isSelectedDay(day) && !isDateDisabled(day)"
+                  [class.cursor-pointer]="!isDateDisabled(day)"
+                  [class.text-slate-300]="isDateDisabled(day)"
+                  [class.cursor-not-allowed]="isDateDisabled(day)"
+                  [class.line-through]="isDateDisabled(day)">{{ day }}</button>
+                } @else {
+                <div></div>
+                }
+                }
+              </div>
+              <!-- Footer shortcuts -->
+              <div class="mt-2 flex justify-between items-center border-t border-slate-100 pt-2">
+                <button type="button" (click)="calSelectDay(0);dateOfBirth='';calOpen=false"
+                  class="text-xs text-slate-500 hover:text-red-500 cursor-pointer">Clear</button>
+                <button type="button" (click)="calYear=maxCalYear;calMonth=maxCalMonth"
+                  class="text-xs text-indigo-600 hover:text-indigo-800 font-medium cursor-pointer">Latest Month</button>
+              </div>
+            </div>
+            }
+          </div>
+        </div>
+        <div>
+          <label class="field-label">Gender <span class="required">*</span></label>
+          <select class="form-field" [(ngModel)]="gender">
+            <option value="">Select gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Aadhar Card Number <span class="required">*</span></label>
+          <input type="text" class="form-field" [class.border-red-500]="aadharError" [(ngModel)]="aadharNumber"
+            (blur)="onAadharChange()" placeholder="12-digit Aadhar" maxlength="12">
+          @if (aadharError) { <span class="text-red-500 text-sm mt-1 block">{{ aadharError }}</span> }
+        </div>
+        <div>
+          <label class="field-label">Category <span class="required">*</span></label>
+          <select class="form-field" [(ngModel)]="category">
+            <option value="">Select Category</option>
+            <option value="General">General / Open</option>
+            <option value="SC">SC (Scheduled Caste)</option>
+            <option value="ST">ST (Scheduled Tribe)</option>
+            <option value="SEBC">SEBC / OBC</option>
+            <option value="EWS">EWS</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="section-title">Contact Information</h3>
+      
+      @if (isEditMode) {
+      <div class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800 flex items-start gap-2">
+        <svg class="w-5 h-5 flex-shrink-0 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+        <p><strong>Important:</strong> Your email is already verified from your original application. You must verify your mobile number to proceed with the resubmission.</p>
+      </div>
+      }
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label class="field-label">Email Address <span class="required">*</span></label>
+          <div class="flex gap-2">
+            <input type="email" class="form-field flex-1" [(ngModel)]="email" placeholder="your.email@example.com"
+              [attr.disabled]="isEditMode ? true : ((emailVerified || emailOtpSent || emailOtpLoading) ? true : null)">
+            @if (isEditMode) {
+            <span class="inline-flex items-center px-3 py-2 rounded-md bg-green-50 text-green-700 text-sm font-medium border border-green-200">
+              <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+              Verified
+            </span>
+            } @else if (!emailOtpSent && !emailVerified) {
+            <button class="btn-secondary whitespace-nowrap" (click)="sendEmailOtp()"
+              [disabled]="emailOtpLoading || !email.trim()">
+              {{ emailOtpLoading ? 'Wait...' : 'Verify' }}
+            </button>
+            }
+          </div>
+          @if (emailOtpError) { <p class="text-red-500 text-sm mt-1">{{emailOtpError}}</p> }
+          @if (!isEditMode && emailOtpSent && !emailVerified) {
+          <div class="mt-2 flex gap-2 animate-fade-in">
+            <input type="text" class="form-field flex-1" [(ngModel)]="emailOtp" placeholder="Enter 4-digit OTP"
+              maxlength="4">
+            <button class="btn-primary whitespace-nowrap" (click)="verifyEmailOtp()"
+              [disabled]="emailOtpLoading || emailOtp.length !== 4">
+              Confirm
+            </button>
+            <button class="btn-secondary whitespace-nowrap border-0" (click)="resendEmailOtp()"
+              [disabled]="emailOtpLoading">
+              Resend
+            </button>
+          </div>
+          }
+          @if (!isEditMode && emailVerified) {
+          <div class="mt-2 text-green-600 flex items-center gap-1 text-sm font-medium animate-fade-in">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Email Verified
+          </div>
+          }
+        </div>
+        <div>
+          <label class="field-label">Mobile Number <span class="required">*</span></label>
+          <div class="flex gap-2">
+            <input type="tel" class="form-field flex-1" [(ngModel)]="phone" placeholder="10-digit mobile number"
+              [attr.disabled]="isEditMode ? true : ((phoneVerified || phoneOtpSent || phoneOtpLoading) ? true : null)">
+            @if (!phoneOtpSent && !phoneVerified) {
+            <button class="btn-secondary whitespace-nowrap" (click)="sendPhoneOtp()"
+              [disabled]="phoneOtpLoading || !phone.trim()">
+              {{ phoneOtpLoading ? 'Wait...' : 'Verify' }}
+            </button>
+            }
+          </div>
+          @if (phoneOtpError) { <p class="text-red-500 text-sm mt-1">{{phoneOtpError}}</p> }
+          @if (phoneOtpSent && !phoneVerified) {
+          <div class="mt-2 flex gap-2 animate-fade-in">
+            <input type="text" class="form-field flex-1" [(ngModel)]="phoneOtp" placeholder="Enter OTP" maxlength="6">
+            <button class="btn-primary whitespace-nowrap" (click)="verifyPhoneOtp()"
+              [disabled]="phoneOtpLoading || phoneOtp.length < 4">
+              Confirm
+            </button>
+            <button class="btn-secondary whitespace-nowrap border-0" (click)="resendPhoneOtp()"
+              [disabled]="phoneOtpLoading">
+              Resend
+            </button>
+          </div>
+          }
+          @if (phoneVerified) {
+          <div class="mt-2 text-green-600 flex items-center gap-1 text-sm font-medium animate-fade-in">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Phone Verified
+          </div>
+          }
+          <div id="recaptcha-wrapper"></div>
+        </div>
+        <div class="md:col-span-2">
+          <label class="field-label">Permanent Address <span class="required">*</span></label>
+          <textarea class="form-field" rows="2" [(ngModel)]="address"
+            placeholder="Full address with house/flat no., society, area"></textarea>
+        </div>
+        <div>
+          <label class="field-label">City/Village <span class="required">*</span></label>
+          <input type="text" class="form-field" [(ngModel)]="city" placeholder="City or Village">
+        </div>
+        <div>
+          <label class="field-label">State <span class="required">*</span></label>
+          <input type="text" class="form-field" [(ngModel)]="stateProvince">
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-between items-center mt-8">
+      <button class="btn-secondary" disabled>Previous</button>
+      <button class="btn-primary" (click)="nextTab()">Continue to Academic Background</button>
+    </div>
+    }
+
+    <!-- Step 2: Academic Background -->
+    @if (currentStep === 2) {
+    <div class="form-section">
+      <h3 class="section-title">SSC (10th Standard) Details</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div>
+          <label class="field-label">Board Name <span class="required">*</span></label>
+          <select class="form-field" [(ngModel)]="sscBoard">
+            <option value="">Select Board</option>
+            <option value="GSEB">GSEB (Gujarat Board)</option>
+            <option value="CBSE">CBSE</option>
+            <option value="ICSE">ICSE</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Passing Year <span class="required">*</span></label>
+          <input type="text" class="form-field" [class.border-red-500]="sscYearError" [(ngModel)]="sscPassingYear"
+            placeholder="YYYY (e.g. 2022)">
+          @if (sscYearError) { <span class="text-red-500 text-sm mt-1 block">{{ sscYearError }}</span> }
+        </div>
+        <div>
+          <label class="field-label">SSC Seat Number <span class="required">*</span></label>
+          <input type="text" class="form-field" [(ngModel)]="sscSeatNo" placeholder="Seat No.">
+        </div>
+        <div>
+          <label class="field-label">Total Marks <span class="required">*</span></label>
+          <input type="number" class="form-field" [(ngModel)]="sscTotalMarks" placeholder="e.g. 600">
+        </div>
+        <div>
+          <label class="field-label">Obtained Marks <span class="required">*</span></label>
+          <input type="number" class="form-field" [class.border-red-500]="sscMarksError" [(ngModel)]="sscObtainedMarks"
+            placeholder="e.g. 510">
+          @if (sscMarksError) { <span class="text-red-500 text-sm mt-1 block">{{ sscMarksError }}</span> }
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="section-title">HSC (12th Standard) Details</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div>
+          <label class="field-label">Stream <span class="required">*</span></label>
+          <select class="form-field" [(ngModel)]="hscStream">
+            <option value="">Select Stream</option>
+            <option value="Science">Science</option>
+            <option value="Commerce">Commerce</option>
+            <option value="Arts">Arts</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Board Name <span class="required">*</span></label>
+          <select class="form-field" [(ngModel)]="hscBoard">
+            <option value="">Select Board</option>
+            <option value="GSEB">GSEB (Gujarat Board)</option>
+            <option value="CBSE">CBSE</option>
+            <option value="ICSE">ICSE</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Passing Year <span class="required">*</span></label>
+          <input type="text" class="form-field" [class.border-red-500]="hscYearError" [(ngModel)]="hscPassingYear"
+            placeholder="YYYY (e.g. 2024)">
+          @if (hscYearError) { <span class="text-red-500 text-sm mt-1 block">{{ hscYearError }}</span> }
+        </div>
+        <div>
+          <label class="field-label">HSC Seat Number <span class="required">*</span></label>
+          <input type="text" class="form-field" [(ngModel)]="hscSeatNo" placeholder="Seat No.">
+        </div>
+        <div>
+          <label class="field-label">Total Marks <span class="required">*</span></label>
+          <input type="number" class="form-field" [(ngModel)]="hscTotalMarks" placeholder="e.g. 700">
+        </div>
+        <div>
+          <label class="field-label">Obtained Marks <span class="required">*</span></label>
+          <input type="number" class="form-field" [class.border-red-500]="hscMarksError" [(ngModel)]="hscObtainedMarks"
+            placeholder="e.g. 620">
+          @if (hscMarksError) { <span class="text-red-500 text-sm mt-1 block">{{ hscMarksError }}</span> }
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3 class="section-title">College & Program Preference</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="md:col-span-2">
+          <label class="field-label">Select College <span class="required">*</span></label>
+          <select class="form-field" [(ngModel)]="selectedCollegeCode" (change)="onCollegeChange()">
+            <option value="">Choose a Global University college...</option>
+            @for (college of colleges; track college._id) {
+            <option [value]="college.code">{{ college.name }}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Select Course <span class="required">*</span></label>
+          <select class="form-field" [(ngModel)]="intendedMajor" [disabled]="!selectedCollegeCode">
+            <option value="">{{ selectedCollegeCode ? 'Select course' : 'Select a college first' }}</option>
+            @for (program of availablePrograms; track program) {
+            <option [value]="program">{{ program }}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="field-label">Admission Term</label>
+          <div class="form-field bg-slate-50 text-slate-500 cursor-not-allowed">Semester 1</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-between items-center mt-8">
+      <button class="btn-secondary" (click)="previousTab()">Previous</button>
+      <button class="btn-primary" (click)="nextTab()">Continue to Documents</button>
+    </div>
+    }
+
+    <!-- Step 3: Documents -->
+    @if (currentStep === 3) {
+    <div class="form-section">
+      <h3 class="section-title">Required Document Uploads</h3>
+      @if (isEditMode) {
+      <div class="mb-6 p-4 bg-indigo-50 border border-indigo-100 rounded-lg text-sm text-indigo-800 flex items-start gap-3">
+        <svg class="w-5 h-5 flex-shrink-0 mt-0.5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <p>Your previously uploaded documents have been saved. You only need to upload new files if you want to replace the old ones or if Admissions specifically requested it.</p>
+      </div>
+      }
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+          <label class="field-label">Passport Size Photo <span class="required" *ngIf="!isEditMode">*</span></label>
+          <input type="file" class="form-field" accept="image/*" (change)="onFileChange($event, 'photo')">
+          <p class="text-xs text-gray-500 mt-1">Image Format (JPG/PNG)</p>
+        </div>
+        <div>
+          <label class="field-label">Student Signature <span class="required" *ngIf="!isEditMode">*</span></label>
+          <input type="file" class="form-field" accept="image/*" (change)="onFileChange($event, 'signature')">
+          <p class="text-xs text-gray-500 mt-1">Image Format (JPG/PNG)</p>
+        </div>
+        <div>
+          <label class="field-label">SSC (10th) Marksheet <span class="required" *ngIf="!isEditMode">*</span></label>
+          <input type="file" class="form-field" accept=".pdf,.jpg,.png" (change)="onFileChange($event, 'ssc')">
+        </div>
+        <div>
+          <label class="field-label">HSC (12th) Marksheet <span class="required" *ngIf="!isEditMode">*</span></label>
+          <input type="file" class="form-field" accept=".pdf,.jpg,.png" (change)="onFileChange($event, 'hsc')">
+        </div>
+        <div>
+          <label class="field-label">Aadhar Card <span class="required" *ngIf="!isEditMode">*</span></label>
+          <input type="file" class="form-field" accept=".pdf,.jpg,.png" (change)="onFileChange($event, 'aadhar')">
+        </div>
+        <div>
+          <label class="field-label">School Leaving Certificate</label>
+          <input type="file" class="form-field" accept=".pdf,.jpg,.png" (change)="onFileChange($event, 'leaving')">
+          <p class="text-xs text-gray-500 mt-1">Optional for submission</p>
+        </div>
+        <div>
+          <label class="field-label">Caste Certificate (If Applicable)</label>
+          <input type="file" class="form-field" accept=".pdf,.jpg,.png" (change)="onFileChange($event, 'caste')">
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-between items-center mt-8">
+      <button class="btn-secondary" (click)="previousTab()">Previous</button>
+      <button class="btn-primary" (click)="nextTab()">Continue to Review</button>
+    </div>
+    }
+
+    <!-- Step 4: Review & Submit -->
+    @if (currentStep === 4) {
+    <!-- Default review state -->
+    @if (submissionResult === 'none') {
+    <div class="form-section">
+      <h3 class="text-xl font-semibold mb-4 text-gray-700">Review Your Global University Application</h3>
+      <p class="mb-6 text-gray-600">Please verify all information as per your official documents.</p>
+
+      <div class="border rounded-lg p-4 bg-gray-50 mb-6 space-y-6">
+        <div>
+          <h4 class="text-lg font-bold mb-3 border-b pb-1 text-indigo-700">Personal Information</h4>
+          <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+            <div><strong class="font-medium">Full Name:</strong> {{ surname }} {{ firstName }} {{ fatherName }}</div>
+            <div><strong class="font-medium">Mother Name:</strong> {{ motherName }}</div>
+            <div><strong class="font-medium">DOB:</strong> {{ dateOfBirth }}</div>
+            <div><strong class="font-medium">Gender:</strong> {{ gender }}</div>
+            <div><strong class="font-medium">Aadhar:</strong> {{ aadharNumber }}</div>
+            <div><strong class="font-medium">Category:</strong> {{ category }}</div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-lg font-bold mb-3 border-b pb-1 text-indigo-700">Academic & Preference</h4>
+          <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+            <div><strong class="font-medium">SSC Board:</strong> {{ sscBoard }} ({{ sscPassingYear }})</div>
+            <div><strong class="font-medium">HSC Board:</strong> {{ hscBoard }} ({{ hscPassingYear }})</div>
+            <div><strong class="font-medium">HSC Stream:</strong> {{ hscStream }}</div>
+            <div><strong class="font-medium">Selected College:</strong> {{ selectedCollegeName }}</div>
+            <div><strong class="font-medium">Selected Course:</strong> {{ intendedMajor }}</div>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-lg font-bold mb-3 border-b pb-1 text-indigo-700">Documents Status</h4>
+          <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+            <div><strong class="font-medium">Photo:</strong> {{ getFileStatus(photoFile) }}</div>
+            <div><strong class="font-medium">Signature:</strong> {{ getFileStatus(signatureFile) }}</div>
+            <div><strong class="font-medium">10th Marksheet:</strong> {{ getFileStatus(marksheet10File) }}</div>
+            <div><strong class="font-medium">12th Marksheet:</strong> {{ getFileStatus(marksheet12File) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-6">
+      <h4 class="font-semibold text-yellow-800 mb-2">Important Notice</h4>
+      <p class="text-yellow-700">Once you submit your application, you will not be able to make changes. Please ensure
+        all information is accurate and complete.</p>
+    </div>
+
+    <div class="flex justify-between items-center mt-8">
+      <button class="btn-secondary" (click)="previousTab()">Previous</button>
+      <button class="btn-primary" [disabled]="submitting" (click)="submitApplication()">
+        @if (submitting) {
+        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-block" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+          <path class="opacity-75" fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+        </svg>
+        Submitting...
+        } @else {
+        {{ isEditMode ? 'Resubmit Application' : 'Submit Application' }}
+        }
+      </button>
+    </div>
+    }
+
+    <!-- Success -->
+    @if (submissionResult === 'success') {
+    <div class="text-center py-12">
+      <div class="success-message">
+        @if (isEditMode) {
+        <h3 class="text-2xl font-bold mb-2">Application Resubmitted Successfully!</h3>
+        <p class="text-lg">Your corrections have been sent back to the Admissions Office for review.</p>
+        <p class="mt-4 text-sm opacity-90">
+          Application ID:<br>
+          <span class="font-mono text-lg">{{ submissionAppId }}</span>
+        </p>
+        <p class="mt-2 text-xs opacity-75">You will be notified by email once your application has been reviewed.</p>
+        } @else {
+        <h3 class="text-2xl font-bold mb-2">Application Submitted Successfully!</h3>
+        <p class="text-lg">Thank you for your application.</p>
+        <p class="mt-4 text-sm opacity-90">
+          Your Application ID:<br>
+          <span class="font-mono text-lg">{{ submissionAppId }}</span>
+        </p>
+        <p class="mt-2 text-xs opacity-75">Please note this ID to check your status later.</p>
+        }
+      </div>
+      <div class="mt-8 flex flex-col items-center gap-3">
+        @if (isEditMode) {
+        <button class="btn-primary" (click)="goToStatusChecker()">Back to Status Checker</button>
+        } @else {
+        <button class="btn-primary" (click)="resetForm()">Submit Another Application</button>
+        }
+      </div>
+    </div>
+    }
+
+    <!-- Duplicate Email -->
+    @if (submissionResult === 'duplicate') {
+    <div class="text-center py-12">
+      <div class="error-message">
+        <h3 class="text-2xl font-bold mb-2">Duplicate Email Found!</h3>
+        <p class="text-lg">This email has already been used to submit an application:</p>
+        <p class="mt-2 text-yellow-100 text-lg font-mono">{{ submissionEmail }}</p>
+        <p class="mt-4 text-sm opacity-90">
+          Existing Application ID:<br>
+          <span class="font-mono text-base">{{ existingAppId }}</span>
+        </p>
+        <p class="mt-4 text-xs opacity-80">
+          You can check the status of this application using the Application ID on the status page,
+          or change your email and submit a new application.
+        </p>
+      </div>
+      <div class="mt-8 flex flex-col items-center gap-3">
+        <button class="btn-primary" (click)="goToStatusChecker()">Go to Status Checker</button>
+        <button class="btn-primary" (click)="goToEmailStep()">Submit with a Different Email</button>
+      </div>
+    </div>
+    }
+
+    <!-- Duplicate Aadhar -->
+    @if (submissionResult === 'duplicate-aadhar') {
+    <div class="text-center py-12">
+      <div class="error-message">
+        <h3 class="text-2xl font-bold mb-2">Duplicate Aadhar Found!</h3>
+        <p class="text-lg">This Aadhar number has already been used to submit an application.</p>
+        <p class="mt-4 text-sm opacity-90">
+          Existing Application ID:<br>
+          <span class="font-mono text-base">{{ existingAppId }}</span>
+        </p>
+        <p class="mt-4 text-xs opacity-80">
+          You can check the status of this application using the Application ID on the status page.
+        </p>
+      </div>
+      <div class="mt-8 flex flex-col items-center gap-3">
+        <button class="btn-primary" (click)="goToStatusChecker()">Go to Status Checker</button>
+        <button class="btn-primary" (click)="goToTab(1)">Review Personal Information</button>
+      </div>
+    </div>
+    }
+
+    <!-- Server Error -->
+    @if (submissionResult === 'error') {
+    <div class="text-center py-12">
+      <div class="error-message">
+        <h3 class="text-2xl font-bold mb-2">Error Submitting Application!</h3>
+        <p class="text-lg">We could not submit your application.</p>
+        <p class="mt-4 text-sm opacity-90">Error: {{ submissionError }}</p>
+      </div>
+      <div class="mt-8">
+        <button class="btn-primary" (click)="resetForm()">Try Again</button>
+      </div>
+    </div>
+    }
+
+    <!-- Validation Error -->
+    @if (submissionResult === 'validation-error') {
+    <div class="text-center py-12">
+      <div class="error-message">
+        <h3 class="text-2xl font-bold mb-2">Application Submission Failed!</h3>
+        <p class="text-lg mb-4">The application failed final validation:</p>
+        <ul class="list-disc list-inside text-left mx-auto max-w-sm">
+          @for (err of validationErrors; track err) {
+          <li class="text-sm text-yellow-100 font-medium">{{ err }}</li>
+          }
+        </ul>
+        @if (validationHint) {
+        <p class="mt-4 text-sm text-yellow-100 font-bold">{{ validationHint }}</p>
+        }
+        <p class="mt-4 text-sm opacity-90">Please correct the errors and try again.</p>
+      </div>
+      <div class="mt-8">
+        <button class="btn-primary" (click)="goToEmailStep()">Go Back / Correct Errors</button>
+      </div>
+    </div>
+    }
+    }
+  </div>
+</div>

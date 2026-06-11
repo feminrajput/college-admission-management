@@ -1,0 +1,85 @@
+<div class="space-y-6 animate-fade-in">
+  <div>
+    <h2 class="text-2xl font-bold text-surface-900">Settings</h2>
+    <p class="text-sm text-surface-500 mt-1">University-wide configuration</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- University Info -->
+    <div class="card p-6">
+      <h3 class="font-semibold text-surface-900 mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+        University Information
+      </h3>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-surface-700 mb-1.5">University Name</label>
+          <input type="text" class="input" value="Global University" disabled />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-surface-700 mb-1.5">Admin Email</label>
+          <input type="email" class="input" value="admin&#64;globaluniversity.edu" disabled />
+        </div>
+      </div>
+      <p class="text-xs text-surface-400 mt-4">Contact your system administrator to update these settings.</p>
+    </div>
+
+    <!-- Email Settings -->
+    <div class="card p-6">
+      <h3 class="font-semibold text-surface-900 mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+        Email Notifications
+      </h3>
+      <div class="space-y-3">
+        <div class="flex items-center justify-between p-3 rounded-lg bg-surface-50">
+          <div>
+            <div class="text-sm font-medium text-surface-900">Application Confirmation</div>
+            <div class="text-xs text-surface-500">Send email when application is submitted</div>
+          </div>
+          <div class="badge badge-success">Active</div>
+        </div>
+        <div class="flex items-center justify-between p-3 rounded-lg bg-surface-50">
+          <div>
+            <div class="text-sm font-medium text-surface-900">Status Update</div>
+            <div class="text-xs text-surface-500">Send email when status changes</div>
+          </div>
+          <div class="badge badge-success">Active</div>
+        </div>
+        <div class="flex items-center justify-between p-3 rounded-lg bg-surface-50">
+          <div>
+            <div class="text-sm font-medium text-surface-900">Query Notification</div>
+            <div class="text-xs text-surface-500">Send email when query is raised</div>
+          </div>
+          <div class="badge badge-success">Active</div>
+        </div>
+      </div>
+      <p class="text-xs text-surface-400 mt-4">Email configuration is managed via environment variables.</p>
+    </div>
+
+    <!-- System Info -->
+    <div class="card p-6 md:col-span-2">
+      <h3 class="font-semibold text-surface-900 mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        System Information
+      </h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="p-3 rounded-lg bg-surface-50">
+          <div class="text-xs text-surface-500">Frontend</div>
+          <div class="text-sm font-medium text-surface-900">Angular 21</div>
+        </div>
+        <div class="p-3 rounded-lg bg-surface-50">
+          <div class="text-xs text-surface-500">Backend</div>
+          <div class="text-sm font-medium text-surface-900">Express 5</div>
+        </div>
+        <div class="p-3 rounded-lg bg-surface-50">
+          <div class="text-xs text-surface-500">Database</div>
+          <div class="text-sm font-medium text-surface-900">MongoDB</div>
+        </div>
+        <div class="p-3 rounded-lg bg-surface-50">
+          <div class="text-xs text-surface-500">API Port</div>
+          <div class="text-sm font-medium text-surface-900">6060</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

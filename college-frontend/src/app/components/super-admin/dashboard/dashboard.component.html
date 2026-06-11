@@ -1,0 +1,160 @@
+@if (loading) {
+  <div class="flex items-center justify-center py-20">
+    <div class="text-center">
+      <svg class="animate-spin w-8 h-8 text-primary-600 mx-auto mb-3" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+      <p class="text-sm text-surface-500">Loading dashboard...</p>
+    </div>
+  </div>
+} @else {
+  <div class="space-y-6 animate-fade-in">
+    <div>
+      <h2 class="text-2xl font-bold text-surface-900">University Dashboard</h2>
+      <p class="text-sm text-surface-500 mt-1">Overview of all colleges and admissions activity</p>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="glass-box p-6 rounded-2xl border-white/40 shadow-sm group">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 rounded-2xl bg-primary-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 text-primary-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          <div class="flex flex-col items-end">
+            <div class="flex items-center gap-1.5 text-[10px] font-bold text-emerald-600 uppercase tracking-widest mb-1">
+              Live
+              <span class="stat-pulse"></span>
+            </div>
+            @if (stats.todayCount > 0) {
+              <span class="text-xs font-semibold text-emerald-600 bg-emerald-50/50 px-2 py-0.5 rounded-lg">+{{ stats.todayCount }} today</span>
+            }
+          </div>
+        </div>
+        <div class="text-3xl font-black text-surface-900 leading-none mb-1">{{ stats.total | number }}</div>
+        <div class="text-xs font-medium text-surface-500 uppercase tracking-wide">Total Applications</div>
+      </div>
+
+      <div class="glass-box p-6 rounded-2xl border-white/40 shadow-sm group">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 rounded-2xl bg-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+          </div>
+          <span class="text-[10px] font-bold text-purple-600 uppercase tracking-widest">Global</span>
+        </div>
+        <div class="text-3xl font-black text-surface-900 leading-none mb-1">{{ overview?.activeColleges || 0 }}</div>
+        <div class="text-xs font-medium text-surface-500 uppercase tracking-wide">Active Colleges</div>
+      </div>
+
+      <div class="glass-box p-6 rounded-2xl border-white/40 shadow-sm group">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          </div>
+          <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Network</span>
+        </div>
+        <div class="text-3xl font-black text-surface-900 leading-none mb-1">{{ overview?.activeUsers || 0 }}</div>
+        <div class="text-xs font-medium text-surface-500 uppercase tracking-wide">Admin Users</div>
+      </div>
+
+      <div class="glass-box p-6 rounded-2xl border-white/40 shadow-sm group">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 rounded-2xl bg-sky-100 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <svg class="w-6 h-6 text-sky-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <span class="text-[10px] font-bold text-sky-600 uppercase tracking-widest">Pending</span>
+        </div>
+        <div class="text-3xl font-black text-surface-900 leading-none mb-1">{{ stats.underReview | number }}</div>
+        <div class="text-xs font-medium text-surface-500 uppercase tracking-wide">Avg. Response Time</div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Status Distribution -->
+      <div class="card p-6">
+        <h3 class="font-semibold text-surface-900 mb-4">Status Distribution</h3>
+        @if (stats.total > 0) {
+          <div class="h-64">
+            <canvas baseChart [data]="doughnutChartData" [options]="doughnutChartOptions" type="doughnut"></canvas>
+          </div>
+        } @else {
+          <div class="h-64 flex items-center justify-center text-sm text-surface-400">No data yet</div>
+        }
+      </div>
+
+      <!-- Applications by College -->
+      <div class="card p-6">
+        <h3 class="font-semibold text-surface-900 mb-4">Applications by College</h3>
+        @if (overview && overview.collegeStats.length > 0) {
+          <div class="h-64">
+            <canvas baseChart [data]="barChartData" [options]="barChartOptions" type="bar"></canvas>
+          </div>
+        } @else {
+          <div class="h-64 flex items-center justify-center text-sm text-surface-400">No data yet</div>
+        }
+      </div>
+
+      <!-- Monthly Trend -->
+      <div class="card p-6">
+        <h3 class="font-semibold text-surface-900 mb-4">Monthly Trend</h3>
+        @if (overview && overview.monthlyTrend.length > 0) {
+          <div class="h-64">
+            <canvas baseChart [data]="trendChartData" [options]="trendChartOptions" type="line"></canvas>
+          </div>
+        } @else {
+          <div class="h-64 flex items-center justify-center text-sm text-surface-400">No data yet</div>
+        }
+      </div>
+    </div>
+
+    <!-- College Stats + Recent -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- College Performance -->
+      @if (overview) {
+        <div class="card p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-semibold text-surface-900">College Performance</h3>
+            <a routerLink="/super-admin/colleges" class="text-xs text-primary-600 hover:text-primary-700 font-medium">Manage</a>
+          </div>
+          <div class="space-y-3">
+            @for (college of overview.collegeStats; track college.collegeCode) {
+              <div class="flex items-center justify-between p-3 rounded-lg bg-surface-50 hover:bg-surface-100 transition-colors">
+                <div>
+                  <div class="text-sm font-medium text-surface-900">{{ college.collegeName }}</div>
+                  <div class="text-xs text-surface-500">{{ college.total }} applications</div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="badge badge-success">{{ college.approved }}</span>
+                  <span class="badge badge-info">{{ college.underReview }}</span>
+                  <span class="badge badge-danger">{{ college.rejected }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Recent Applications -->
+      <div class="card p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-semibold text-surface-900">Recent Applications</h3>
+          <a routerLink="/super-admin/applications" class="text-xs text-primary-600 hover:text-primary-700 font-medium">View all</a>
+        </div>
+        @if (recentApplications.length === 0) {
+          <div class="py-10 text-center text-sm text-surface-400">No applications yet</div>
+        } @else {
+          <div class="space-y-2">
+            @for (app of recentApplications; track app.applicationId) {
+              <div class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-50 transition-colors">
+                <div class="min-w-0 flex-1">
+                  <div class="text-sm font-medium text-surface-900 truncate">{{ app.name }}</div>
+                  <div class="text-xs text-surface-500">{{ app.applicationId }} &middot; {{ app.program }}</div>
+                </div>
+                <span class="badge {{ getStatusClass(app.status) }} ml-3 flex-shrink-0">{{ app.status }}</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}

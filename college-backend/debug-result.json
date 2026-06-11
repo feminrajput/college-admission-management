@@ -1,0 +1,22 @@
+[
+  {
+    "appId": "GU2025-00001",
+    "emailInPersonal": "ananya.chauhan@example.com"
+  },
+  {
+    "appId": "GU2025-00002",
+    "emailInPersonal": "aarav.solanki@example.com"
+  },
+  {
+    "appId": "GU2025-00003",
+    "emailInPersonal": "rahul.mehta@example.com"
+  },
+  {
+    "appId": "GU2025-00004",
+    "emailInPersonal": "priya.bhatt@example.com"
+  },
+  {
+    "appId": "GU2025-00005",
+    "emailInPersonal": "aaradhya.trivedi@example.com"
+  }
+]

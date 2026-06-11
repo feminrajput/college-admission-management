@@ -1,15 +1,30 @@
 # Node dependencies
+node_modules/
 college-backend/node_modules/
 college-frontend/node_modules/
 
 # Environment files
 college-backend/.env
+college-frontend/src/environments/environment.prod.ts
+
+# Production builds
+college-frontend/dist/
+college-frontend/.angular/
+college-frontend/build_output.txt
 
 # Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Uploads and temporary files
+college-backend/uploads/
+college-backend/server_output.txt
+college-backend/debug-out.txt
+*.tgz
+nul
+college-backend/nul
 
 # OS / Editor junk
 .DS_Store

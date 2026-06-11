@@ -1,0 +1,553 @@
+<!-- Hero Section -->
+<section id="home" class="hero-section">
+  <div class="hero-overlay">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div
+        class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-box text-white/90 text-sm font-medium mb-8 animate-fade-in">
+        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+        Admissions Open for Academic Year 2025-26
+      </div>
+      <h1 class="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-8 animate-fade-in"
+        style="animation-delay: 0.1s">
+        Elevate Your Potential at<br />
+        <span class="bg-gradient-to-r from-primary-300 to-purple-300 bg-clip-text text-transparent">Global
+          University</span>
+      </h1>
+      <p class="text-xl sm:text-2xl text-white/90 mb-12 max-w-3xl mx-auto font-light leading-relaxed animate-fade-in"
+        style="animation-delay: 0.2s">
+        Join a prestigious community of innovators and leaders. Discover world-class programs across our specialized
+        colleges.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-6 animate-fade-in"
+        style="animation-delay: 0.3s">
+        <a routerLink="/apply" class="btn-primary px-10 py-4 text-lg shadow-2xl shadow-primary-900/50">
+          Apply Now
+        </a>
+        <a (click)="scrollToColleges()" style="cursor:pointer"
+          class="btn-secondary px-10 py-4 text-lg glass-box text-white border-white/20 hover:bg-white/10">
+          Explore Colleges
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="relative -mt-16 z-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+      <div
+        class="glass-box p-6 md:p-8 rounded-2xl border-white/10 bg-white/70 backdrop-blur-xl shadow-xl animate-fade-in"
+        style="animation-delay: 0.4s">
+        <div class="text-sm font-bold text-primary-600 uppercase tracking-wider mb-2 flex items-center gap-2">
+          Applications
+          <span class="stat-pulse"></span>
+        </div>
+        <div class="text-4xl font-black text-surface-900">{{ stats.totalApplications | number }}</div>
+        <div class="text-xs text-surface-500 mt-1 font-medium italic">Update every 30s</div>
+      </div>
+      <div
+        class="glass-box p-6 md:p-8 rounded-2xl border-white/10 bg-white/70 backdrop-blur-xl shadow-xl animate-fade-in"
+        style="animation-delay: 0.5s">
+        <div class="text-sm font-bold text-purple-600 uppercase tracking-wider mb-2">Colleges</div>
+        <div class="text-4xl font-black text-surface-900">{{ stats.activeColleges }}</div>
+        <div class="text-xs text-surface-500 mt-1 font-medium">Verified Institutions</div>
+      </div>
+      <div
+        class="glass-box p-6 md:p-8 rounded-2xl border-white/10 bg-white/70 backdrop-blur-xl shadow-xl animate-fade-in"
+        style="animation-delay: 0.6s">
+        <div class="text-sm font-bold text-amber-600 uppercase tracking-wider mb-2">Programs</div>
+        <div class="text-4xl font-black text-surface-900">{{ stats.totalPrograms }}</div>
+        <div class="text-xs text-surface-500 mt-1 font-medium">Across all disciplines</div>
+      </div>
+      <div
+        class="glass-box p-6 md:p-8 rounded-2xl border-white/10 bg-white/70 backdrop-blur-xl shadow-xl animate-fade-in"
+        style="animation-delay: 0.7s">
+        <div class="text-sm font-bold text-emerald-600 uppercase tracking-wider mb-2">Departments</div>
+        <div class="text-4xl font-black text-surface-900">{{ stats.totalDepts }}</div>
+        <div class="text-xs text-surface-500 mt-1 font-medium">Specialized units</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="py-16 sm:py-20 bg-surface-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl sm:text-4xl font-bold text-surface-900 mb-3">Why Choose Global University?</h2>
+      <p class="text-surface-500 max-w-2xl mx-auto">Experience excellence in education with our world-class faculty,
+        cutting-edge research, and global career network.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="card card-lg p-7 text-center hover:shadow-lg transition-shadow group">
+        <div
+          class="w-14 h-14 mx-auto mb-5 rounded-2xl bg-primary-100 flex items-center justify-center group-hover:bg-primary-200 transition-colors">
+          <svg class="w-7 h-7 text-primary-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <h3 class="text-lg font-bold text-surface-900 mb-2">World-Class Faculty</h3>
+        <p class="text-sm text-surface-500 leading-relaxed">Learn from leading experts in fields ranging from Artificial
+          Intelligence to Global History.</p>
+      </div>
+      <div class="card card-lg p-7 text-center hover:shadow-lg transition-shadow group">
+        <div
+          class="w-14 h-14 mx-auto mb-5 rounded-2xl bg-purple-100 flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+          <svg class="w-7 h-7 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" />
+          </svg>
+        </div>
+        <h3 class="text-lg font-bold text-surface-900 mb-2">Global Opportunities</h3>
+        <p class="text-sm text-surface-500 leading-relaxed">Access study abroad programs and international internships
+          across 50+ countries.</p>
+      </div>
+      <div class="card card-lg p-7 text-center hover:shadow-lg transition-shadow group">
+        <div
+          class="w-14 h-14 mx-auto mb-5 rounded-2xl bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+          <svg class="w-7 h-7 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        </div>
+        <h3 class="text-lg font-bold text-surface-900 mb-2">Career Success</h3>
+        <p class="text-sm text-surface-500 leading-relaxed">Our graduates enjoy a 97% employment rate within six months
+          of commencement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Colleges Showcase -->
+<section id="colleges" class="relative py-20 sm:py-28 overflow-hidden">
+  <!-- Fancy Background for Glass Theme -->
+  <div class="absolute inset-0 bg-gradient-to-br from-surface-900 via-primary-900 to-purple-900"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+    <div class="text-center mb-16" id="academics">
+      <h2 class="text-3xl sm:text-5xl font-extrabold text-white mb-4 tracking-tight">Discover Our Colleges</h2>
+      <p class="text-white/70 max-w-2xl mx-auto text-lg font-light">Experience our specialized academic divisions,
+        uniquely designed to provide world-class education and prepare you for a successful career.</p>
+    </div>
+
+    <!-- Interactive Slider -->
+    @if (colleges.length > 0) {
+    <div class="relative max-w-4xl mx-auto">
+      <!-- Slider Window -->
+      <div class="overflow-hidden rounded-3xl p-4">
+        <div class="flex transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
+          [style.transform]="'translateX(-' + (currentSlide * 100) + '%)'">
+
+          @for (college of colleges; track college._id; let i = $index) {
+          <!-- Slide -->
+          <div class="w-full flex-shrink-0 px-2 sm:px-4 flex items-center justify-center">
+            <div
+              class="w-full max-w-2xl glass-box p-8 sm:p-12 rounded-[2rem] border-white/20 bg-white/10 backdrop-blur-xl shadow-2xl hover:bg-white/20 transition-all cursor-pointer group flex flex-col items-center text-center"
+              (click)="openCollegeDetails(college)">
+
+              <div
+                class="w-24 h-24 rounded-2xl bg-white/20 flex items-center justify-center mb-6 shadow-lg shadow-black/10 group-hover:scale-110 transition-transform duration-500 border border-white/30 backdrop-blur-md">
+                <svg class="w-12 h-12 text-white drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    [attr.d]="getCollegeIcon(college.icon)" />
+                </svg>
+              </div>
+
+              <h3 class="text-3xl font-bold text-white mb-4 tracking-tight">{{ college.name }}</h3>
+
+              <div
+                class="flex items-center gap-4 text-sm font-medium text-white/80 mb-6 bg-white/10 px-6 py-2 rounded-full border border-white/10">
+                <span class="flex items-center gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                  {{ college.departments.length }} Departments
+                </span>
+                <span class="w-1.5 h-1.5 rounded-full bg-primary-400"></span>
+                <span class="flex items-center gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                  {{ college.programs.length }} Programs
+                </span>
+              </div>
+
+              <p class="text-base text-white/70 leading-relaxed mb-8 line-clamp-3 max-w-lg">{{ college.description }}
+              </p>
+
+              <button
+                class="bg-white text-surface-900 px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 hover:bg-primary-50 transition-all flex items-center gap-2">
+                Explore Details
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <button (click)="prevSlide()"
+        class="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 sm:-ml-12 w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md flex items-center justify-center text-white transition-all hover:scale-110 shadow-lg z-20">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      <button (click)="nextSlide()"
+        class="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 sm:-mr-12 w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 backdrop-blur-md flex items-center justify-center text-white transition-all hover:scale-110 shadow-lg z-20">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+
+      <!-- Dots -->
+      <div class="flex justify-center gap-3 md:mt-8 mt-4 relative z-20">
+        @for (college of colleges; track college._id; let i = $index) {
+        <button (click)="setSlide(i)" class="h-2 rounded-full transition-all duration-300"
+          [class]="currentSlide === i ? 'w-10 bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]' : 'w-2 bg-white/30 hover:bg-white/50'">
+        </button>
+        }
+      </div>
+    </div>
+    } @else {
+    <!-- Loader or empty state if colleges aren't loaded yet -->
+    <div class="flex justify-center p-12 relative z-10">
+      <div class="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+    </div>
+    }
+  </div>
+</section>
+
+<!-- College Info Modal -->
+@if (selectedCollege) {
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+  <div class="absolute inset-0 bg-surface-900/80 backdrop-blur-md animate-fade-in"
+    (click)="closeCollegeDetails($event)"></div>
+
+  <div
+    class="relative bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col z-10 animate-scale-in overflow-hidden border border-surface-200">
+
+    <!-- Modal Header -->
+    <div
+      class="relative p-8 pb-12 bg-gradient-to-br from-primary-900 via-purple-900 to-surface-900 text-white overflow-hidden shrink-0">
+      <button (click)="closeCollegeDetails($event)"
+        class="absolute top-6 right-6 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors border border-white/10 z-[60] backdrop-blur-sm cursor-pointer shadow-lg outline-none">
+        <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <div class="relative z-10 flex sm:items-center gap-6 pr-14">
+        <div
+          class="w-20 h-20 shrink-0 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md flex items-center justify-center shadow-inner">
+          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              [attr.d]="getCollegeIcon(selectedCollege.icon)" />
+          </svg>
+        </div>
+        <div>
+          <div
+            class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/10 text-xs font-medium text-white/90 mb-2 backdrop-blur-sm">
+            Code: {{ selectedCollege.code }}
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">{{ selectedCollege.name }}</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="p-8 sm:p-10 overflow-y-auto bg-surface-50 -mt-6 rounded-t-3xl relative z-10">
+
+      <div class="prose prose-lg prose-surface max-w-none mb-10">
+        <p class="text-surface-700 leading-relaxed font-medium">{{ selectedCollege.description }}</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Departments -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-surface-200">
+          <h3 class="text-lg font-bold text-surface-900 mb-4 flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-primary-100 text-primary-600 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+            </div>
+            Departments
+          </h3>
+
+          @if (selectedCollege.departments.length > 0) {
+          <ul class="space-y-3">
+            @for (dept of selectedCollege.departments; track dept) {
+            <li class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-surface-600">{{ dept }}</span>
+            </li>
+            }
+          </ul>
+          } @else {
+          <p class="text-surface-500 italic">No departments listed.</p>
+          }
+        </div>
+
+        <!-- Programs -->
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-surface-200">
+          <h3 class="text-lg font-bold text-surface-900 mb-4 flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            Programs Offered
+          </h3>
+
+          @if (selectedCollege.programs.length > 0) {
+          <div class="flex flex-wrap gap-2">
+            @for (prog of selectedCollege.programs; track prog) {
+            <span
+              class="px-3 py-1.5 rounded-lg bg-surface-100 text-surface-700 text-sm font-medium border border-surface-200">{{
+              prog }}</span>
+            }
+          </div>
+          } @else {
+          <p class="text-surface-500 italic">No programs listed.</p>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="p-6 bg-white border-t border-surface-100 shrink-0 flex items-center justify-between">
+      <p class="text-sm text-surface-500 flex items-center gap-2">
+        Global University &copy; 2025
+      </p>
+      <a [routerLink]="['/apply']" [queryParams]="{ college: selectedCollege.code }"
+        (click)="closeCollegeDetails($event)" class="btn-primary px-8 py-2.5">
+        Apply to this College
+      </a>
+    </div>
+  </div>
+</div>
+}
+
+<!-- How to Apply -->
+<section class="py-16 sm:py-20 bg-surface-50">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl sm:text-4xl font-bold text-surface-900 mb-3">How to Apply</h2>
+      <p class="text-surface-500 max-w-xl mx-auto">Three simple steps to start your journey at Global University.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="text-center">
+        <div
+          class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-primary-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg shadow-primary-600/30">
+          1</div>
+        <h3 class="font-bold text-surface-900 mb-2">Choose Your College</h3>
+        <p class="text-sm text-surface-500 leading-relaxed">Browse our colleges and select the program that aligns with
+          your academic goals.</p>
+      </div>
+      <div class="text-center">
+        <div
+          class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-primary-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg shadow-primary-600/30">
+          2</div>
+        <h3 class="font-bold text-surface-900 mb-2">Submit Application</h3>
+        <p class="text-sm text-surface-500 leading-relaxed">Complete our streamlined online application form with your
+          personal and academic details.</p>
+      </div>
+      <div class="text-center">
+        <div
+          class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-primary-600 text-white flex items-center justify-center text-2xl font-bold shadow-lg shadow-primary-600/30">
+          3</div>
+        <h3 class="font-bold text-surface-900 mb-2">Track Your Status</h3>
+        <p class="text-sm text-surface-500 leading-relaxed">Monitor your application progress in real-time using your
+          Application ID or email.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Admissions Section -->
+<section id="admissions" class="py-16 sm:py-20 bg-white">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl sm:text-4xl font-bold text-surface-900 mb-3">Admissions</h2>
+      <p class="text-surface-500 max-w-xl mx-auto">Key dates and requirements for your application.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+      <!-- Timeline -->
+      <div class="card p-6">
+        <h3 class="font-bold text-surface-900 mb-5 flex items-center gap-2">
+          <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          Key Dates & Deadlines
+        </h3>
+        <div class="space-y-4">
+          <div class="flex items-start gap-3">
+            <div class="w-2 h-2 rounded-full bg-primary-500 mt-2 flex-shrink-0"></div>
+            <div>
+              <div class="font-semibold text-sm text-surface-900">Early Decision</div>
+              <div class="text-xs text-surface-500">November 1st (Notification by Dec 15)</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-2 h-2 rounded-full bg-primary-500 mt-2 flex-shrink-0"></div>
+            <div>
+              <div class="font-semibold text-sm text-surface-900">Regular Decision</div>
+              <div class="text-xs text-surface-500">January 5th (Notification by Apr 1)</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-2 h-2 rounded-full bg-amber-500 mt-2 flex-shrink-0"></div>
+            <div>
+              <div class="font-semibold text-sm text-surface-900">Financial Aid Deadline</div>
+              <div class="text-xs text-surface-500">February 15th</div>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <div class="w-2 h-2 rounded-full bg-emerald-500 mt-2 flex-shrink-0"></div>
+            <div>
+              <div class="font-semibold text-sm text-surface-900">Enrollment Deposit</div>
+              <div class="text-xs text-surface-500">May 1st</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Requirements -->
+      <div class="card p-6">
+        <h3 class="font-bold text-surface-900 mb-5 flex items-center gap-2">
+          <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+          </svg>
+          Required Materials
+        </h3>
+        <div class="space-y-3">
+          <div class="flex items-center gap-3 text-sm text-surface-700">
+            <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Completed Online Application
+          </div>
+          <div class="flex items-center gap-3 text-sm text-surface-700">
+            <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Passport Size Photograph & Signature
+          </div>
+          <div class="flex items-center gap-3 text-sm text-surface-700">
+            <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            10th & 12th Marksheets (SSC / HSC)
+          </div>
+          <div class="flex items-center gap-3 text-sm text-surface-700">
+            <svg class="w-4 h-4 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Aadhar Card (ID Validation)
+          </div>
+          <div class="flex items-center gap-3 text-sm text-surface-700">
+            <svg class="w-4 h-4 text-surface-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+            </svg>
+            <span class="text-surface-500">School Leaving Certificate (Optional)</span>
+          </div>
+          <div class="flex items-center gap-3 text-sm text-surface-700">
+            <svg class="w-4 h-4 text-surface-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+            </svg>
+            <span class="text-surface-500">Caste Certificate (If applicable)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a routerLink="/status" class="btn-secondary px-8 py-3 text-base">Check Application Status</a>
+      <a routerLink="/apply" class="btn-primary px-8 py-3 text-base">Start Your Application</a>
+    </div>
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-16 sm:py-20 bg-surface-50">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl sm:text-4xl font-bold text-surface-900 mb-3">Get In Touch</h2>
+      <p class="text-surface-500 max-w-xl mx-auto">We're here to help with any questions about admissions, academics, or
+        campus life.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="card p-6 text-center hover:shadow-md transition-shadow">
+        <div class="w-12 h-12 mx-auto mb-4 rounded-xl bg-primary-100 flex items-center justify-center">
+          <svg class="w-6 h-6 text-primary-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h3 class="font-bold text-surface-900 mb-1 text-sm">Admissions Office</h3>
+        <p class="text-xs text-surface-500 mb-3">Applications, deadlines & requirements</p>
+        <p class="text-sm font-medium text-primary-600">admissions&#64;globaluniversity.edu</p>
+        <p class="text-xs text-surface-400 mt-1">+91 261 222 7141</p>
+      </div>
+      <div class="card p-6 text-center hover:shadow-md transition-shadow">
+        <div class="w-12 h-12 mx-auto mb-4 rounded-xl bg-purple-100 flex items-center justify-center">
+          <svg class="w-6 h-6 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+        </div>
+        <h3 class="font-bold text-surface-900 mb-1 text-sm">Academic Affairs</h3>
+        <p class="text-xs text-surface-500 mb-3">Course credit, degrees & departments</p>
+        <p class="text-sm font-medium text-primary-600">academics&#64;globaluniversity.edu</p>
+        <p class="text-xs text-surface-400 mt-1">+91 261 222 7142</p>
+      </div>
+      <div class="card p-6 text-center hover:shadow-md transition-shadow">
+        <div class="w-12 h-12 mx-auto mb-4 rounded-xl bg-emerald-100 flex items-center justify-center">
+          <svg class="w-6 h-6 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </div>
+        <h3 class="font-bold text-surface-900 mb-1 text-sm">Main Campus</h3>
+        <p class="text-xs text-surface-500 mb-3">Visit or send official documents</p>
+        <p class="text-sm font-medium text-primary-600">University Road, Surat, Gujarat 395007</p>
+        <p class="text-xs text-surface-400 mt-1">Open M-F, 10am - 5pm</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Banner -->
+<section class="bg-gradient-to-r from-primary-700 via-primary-600 to-purple-700 py-14">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <h2 class="text-2xl sm:text-3xl font-bold text-white mb-4">Ready to Begin Your Future?</h2>
+    <p class="text-white/80 mb-8 max-w-lg mx-auto">Join thousands of students who have transformed their lives through
+      education at Global University.</p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a routerLink="/status"
+        class="btn-secondary px-8 py-3 bg-white/10 border-white/30 text-white hover:bg-white/20">Check Status</a>
+      <a routerLink="/apply"
+        class="bg-white text-primary-700 font-semibold px-8 py-3 rounded-lg hover:bg-primary-50 transition-all shadow-lg">Apply
+        Now</a>
+    </div>
+  </div>
+</section>

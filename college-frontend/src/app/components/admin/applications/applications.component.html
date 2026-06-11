@@ -1,0 +1,412 @@
+<div class="space-y-6 animate-fade-in">
+  <!-- Header -->
+  <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <h2 class="text-2xl font-bold text-surface-900">Applications</h2>
+      <p class="text-sm text-surface-500 mt-1">{{ filtered.length }} application{{ filtered.length !== 1 ? 's' : '' }}
+        found</p>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="card p-4">
+    <div class="flex flex-col lg:flex-row flex-wrap gap-3 items-center">
+      <!-- Search (Always visible) -->
+      <div class="flex-1 min-w-[250px] relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg class="w-4 h-4 text-surface-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+        <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()"
+          placeholder="Search by ID, name, or program..." class="input w-full" style="padding-left: 2.5rem;" />
+      </div>
+
+      <!-- Status (Always visible) -->
+      <select [(ngModel)]="statusFilter" (change)="applyFilters()" class="input sm:w-40">
+        <option value="all">All Statuses</option>
+        <option value="Under Review">Under Review</option>
+        <option value="Approved">Approved</option>
+        <option value="Rejected">Rejected</option>
+        <option value="Query Raised">Query Raised</option>
+      </select>
+
+      <!-- Sort By (Always visible) -->
+      <select [(ngModel)]="sortBy" (change)="applyFilters()" class="input sm:w-40">
+        <option value="dateDesc">Newest First</option>
+        <option value="dateAsc">Oldest First</option>
+        <option value="nameAsc">Name (A-Z)</option>
+        <option value="nameDesc">Name (Z-A)</option>
+      </select>
+
+      <!-- Advanced Filters Toggle -->
+      <button (click)="showAdvancedFilters = !showAdvancedFilters"
+        class="btn-secondary whitespace-nowrap flex items-center gap-2" [class.bg-surface-100]="showAdvancedFilters">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+        </svg>
+        Filters {{ (programFilter !== 'all' || startDateFilter || endDateFilter) ? '(Active)' : '' }}
+      </button>
+    </div>
+
+    <!-- Advanced Filters Container -->
+    @if (showAdvancedFilters) {
+    <div class="mt-4 pt-4 border-t border-surface-200 flex flex-col sm:flex-row flex-wrap gap-4 animate-fade-in">
+      <div class="flex-1 min-w-[200px]">
+        <label class="block text-xs font-semibold text-surface-500 mb-1">Program</label>
+        <select [(ngModel)]="programFilter" (change)="applyFilters()" class="input w-full">
+          <option value="all">All Programs</option>
+          @for (p of uniquePrograms; track p) {
+          <option [value]="p">{{ p }}</option>
+          }
+        </select>
+      </div>
+      <div class="flex-1 min-w-[300px]">
+        <label class="block text-xs font-semibold text-surface-500 mb-1">Submission Date Range</label>
+        <div class="flex items-center gap-2">
+          <input type="date" [(ngModel)]="startDateFilter" (change)="applyFilters()" class="input w-full">
+          <span class="text-surface-400 text-sm font-medium">to</span>
+          <input type="date" [(ngModel)]="endDateFilter" (change)="applyFilters()" class="input w-full">
+        </div>
+      </div>
+      @if (programFilter !== 'all' || startDateFilter || endDateFilter) {
+      <div class="flex items-end">
+        <button (click)="programFilter='all'; startDateFilter=''; endDateFilter=''; applyFilters()"
+          class="text-sm text-primary-600 hover:text-primary-700 font-medium pb-2 cursor-pointer transition-colors">
+          Clear Filters
+        </button>
+      </div>
+      }
+    </div>
+    }
+  </div>
+
+  <!-- Table -->
+  @if (loading) {
+  <div class="card p-12 text-center">
+    <svg class="animate-spin w-8 h-8 text-primary-600 mx-auto mb-3" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+      <path class="opacity-75" fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+    </svg>
+    <p class="text-sm text-surface-500">Loading applications...</p>
+  </div>
+  } @else if (filtered.length === 0) {
+  <div class="card p-12 text-center">
+    <svg class="w-12 h-12 text-surface-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+    </svg>
+    <p class="text-surface-500 font-medium">No applications found</p>
+    <p class="text-sm text-surface-400 mt-1">Try adjusting your filters</p>
+  </div>
+  } @else {
+  <div class="card overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-surface-50 border-b border-surface-200">
+            <th class="text-left py-3 px-4 text-xs font-semibold text-surface-500 uppercase tracking-wider">Application
+              ID</th>
+            <th class="text-left py-3 px-4 text-xs font-semibold text-surface-500 uppercase tracking-wider">Applicant
+            </th>
+            <th
+              class="text-left py-3 px-4 text-xs font-semibold text-surface-500 uppercase tracking-wider hidden md:table-cell">
+              Program</th>
+            <th
+              class="text-left py-3 px-4 text-xs font-semibold text-surface-500 uppercase tracking-wider hidden lg:table-cell">
+              Submitted</th>
+            <th class="text-left py-3 px-4 text-xs font-semibold text-surface-500 uppercase tracking-wider">Status</th>
+            <th class="text-right py-3 px-4 text-xs font-semibold text-surface-500 uppercase tracking-wider">Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-surface-100">
+          @for (app of paginatedApps; track app.applicationId) {
+          <tr class="hover:bg-surface-50 transition-colors">
+            <td class="py-3 px-4 font-mono text-xs text-primary-600 font-medium">{{ app.applicationId }}</td>
+            <td class="py-3 px-4">
+              <div class="font-medium text-surface-900">{{ app.name }}</div>
+            </td>
+            <td class="py-3 px-4 text-surface-600 hidden md:table-cell">{{ app.program }}</td>
+            <td class="py-3 px-4 text-surface-500 hidden lg:table-cell">{{ app.submittedOn }}</td>
+            <td class="py-3 px-4"><span class="badge {{ getStatusClass(app.status) }}">{{ app.status }}</span></td>
+            <td class="py-3 px-4">
+              <div class="flex items-center justify-end gap-1">
+                <button (click)="viewApplication(app)"
+                  class="p-1.5 rounded-lg hover:bg-surface-100 text-surface-500 hover:text-surface-700" title="View">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                </button>
+                @if (app.status !== 'Approved') {
+                <button (click)="approveApplication(app)"
+                  class="p-1.5 rounded-lg hover:bg-emerald-50 text-surface-500 hover:text-emerald-600" title="Approve">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                </button>
+                }
+                @if (app.status !== 'Rejected') {
+                <button (click)="rejectApplication(app)"
+                  class="p-1.5 rounded-lg hover:bg-red-50 text-surface-500 hover:text-red-600" title="Reject">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                }
+                <button (click)="openQueryModal(app)"
+                  class="p-1.5 rounded-lg hover:bg-amber-50 text-surface-500 hover:text-amber-600" title="Query">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </button>
+                <button (click)="deleteApplication(app)"
+                  class="p-1.5 rounded-lg hover:bg-red-50 text-surface-500 hover:text-red-600" title="Delete">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages > 1) {
+    <div class="flex items-center justify-between px-4 py-3 border-t border-surface-200 bg-surface-50">
+      <p class="text-xs text-surface-500">Page {{ page }} of {{ totalPages }} ({{ filtered.length }} results)</p>
+      <div class="flex gap-1">
+        <button (click)="page = page - 1" [disabled]="page === 1"
+          class="px-3 py-1.5 rounded-lg text-xs font-medium border border-surface-300 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed">Prev</button>
+        <button (click)="page = page + 1" [disabled]="page === totalPages"
+          class="px-3 py-1.5 rounded-lg text-xs font-medium border border-surface-300 hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed">Next</button>
+      </div>
+    </div>
+    }
+  </div>
+  }
+</div>
+
+<!-- View Modal -->
+@if (showViewModal && viewApp) {
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div class="fixed inset-0 bg-black/40 backdrop-blur-sm" (click)="closeAllModals()"></div>
+  <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto animate-scale-in">
+    <div class="sticky top-0 bg-white border-b border-surface-200 px-6 py-4 flex items-center justify-between">
+      <h3 class="text-lg font-bold text-surface-900">Application Details</h3>
+      <button (click)="closeAllModals()" class="p-1.5 rounded-lg hover:bg-surface-100 text-surface-500"><svg
+          class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg></button>
+    </div>
+    <div class="p-6 space-y-5">
+      <div class="grid grid-cols-2 gap-4">
+        <div><label class="text-xs text-surface-500 block mb-1">Application ID</label>
+          <p class="font-mono text-sm font-medium text-primary-600">{{ viewApp.applicationId }}</p>
+        </div>
+        <div><label class="text-xs text-surface-500 block mb-1">Status</label><span
+            class="badge {{ getStatusClass(viewApp.status) }}">{{ viewApp.status }}</span></div>
+        <div><label class="text-xs text-surface-500 block mb-1">Applicant Name</label>
+          <p class="text-sm font-medium text-surface-900">{{ viewApp.name }}</p>
+        </div>
+        <div><label class="text-xs text-surface-500 block mb-1">Program</label>
+          <p class="text-sm text-surface-700">{{ viewApp.program }}</p>
+        </div>
+        <div><label class="text-xs text-surface-500 block mb-1">Submitted On</label>
+          <p class="text-sm text-surface-700">{{ viewApp.submittedOn }}</p>
+        </div>
+        <div><label class="text-xs text-surface-500 block mb-1">Last Updated</label>
+          <p class="text-sm text-surface-700">{{ viewApp.lastUpdated }}</p>
+        </div>
+      </div>
+      @if (viewApp.queryMessage) {
+      <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+        <label class="text-xs text-amber-700 font-semibold block mb-1">Query Message</label>
+        <p class="text-sm text-amber-800">{{ viewApp.queryMessage }}</p>
+      </div>
+      }
+      @if (viewApp.data) {
+      <!-- Personal Information -->
+      <div>
+        <label class="text-xs text-surface-500 font-semibold uppercase tracking-wider block mb-2">Personal
+          Information</label>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div><span class="text-surface-500">Full Name:</span> <span class="font-medium">{{
+              viewApp.data.personalInfo?.firstName }} {{ viewApp.data.personalInfo?.surname }}</span></div>
+          <div><span class="text-surface-500">Father's Name:</span> <span class="font-medium">{{
+              viewApp.data.personalInfo?.fatherName || '-' }}</span></div>
+          <div><span class="text-surface-500">Mother's Name:</span> <span class="font-medium">{{
+              viewApp.data.personalInfo?.motherName || '-' }}</span></div>
+          <div><span class="text-surface-500">Date of Birth:</span> <span class="font-medium">{{
+              viewApp.data.personalInfo?.dateOfBirth || '-' }}</span></div>
+          <div><span class="text-surface-500">Gender:</span> <span class="font-medium">{{
+              viewApp.data.personalInfo?.gender || '-' }}</span></div>
+          <div><span class="text-surface-500">Aadhar Number:</span> <span class="font-medium font-mono">{{
+              viewApp.data.personalInfo?.aadharNumber || '-' }}</span></div>
+          <div><span class="text-surface-500">Category:</span> <span class="font-medium">{{
+              viewApp.data.personalInfo?.category || '-' }}</span></div>
+          <div><span class="text-surface-500">Caste:</span> <span class="font-medium">{{
+              viewApp.data.personalInfo?.caste || '-' }}</span></div>
+        </div>
+      </div>
+      <!-- Contact Information -->
+      @if (viewApp.data.contactInfo) {
+      <div>
+        <label class="text-xs text-surface-500 font-semibold uppercase tracking-wider block mb-2">Contact
+          Information</label>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div><span class="text-surface-500">Email:</span> <span class="font-medium">{{ viewApp.data.contactInfo.email
+              || '-' }}</span></div>
+          <div><span class="text-surface-500">Phone:</span> <span class="font-medium">{{ viewApp.data.contactInfo.phone
+              || '-' }}</span></div>
+          <div class="col-span-2"><span class="text-surface-500">Address:</span> <span class="font-medium">{{
+              viewApp.data.contactInfo.address }}, {{ viewApp.data.contactInfo.city }}, {{
+              viewApp.data.contactInfo.stateProvince }} - {{ viewApp.data.contactInfo.zipPostalCode }}</span></div>
+        </div>
+      </div>
+      }
+      <!-- Academic Background -->
+      @if (viewApp.data.academicBackground) {
+      <div>
+        <label class="text-xs text-surface-500 font-semibold uppercase tracking-wider block mb-2">Academic
+          Background</label>
+        <div class="grid grid-cols-2 gap-3 text-sm">
+          <div><span class="text-surface-500">SSC Board:</span> <span class="font-medium">{{
+              viewApp.data.academicBackground.ssc?.board || '-' }}</span></div>
+          <div><span class="text-surface-500">SSC Year:</span> <span class="font-medium">{{
+              viewApp.data.academicBackground.ssc?.year || '-' }}</span></div>
+          <div><span class="text-surface-500">SSC Seat No:</span> <span class="font-medium font-mono">{{
+              viewApp.data.academicBackground.ssc?.seatNo || '-' }}</span></div>
+          <div><span class="text-surface-500">SSC Marks:</span> <span class="font-medium">{{
+              viewApp.data.academicBackground.ssc?.obtainedMarks }}/{{ viewApp.data.academicBackground.ssc?.totalMarks
+              }}</span></div>
+          <div><span class="text-surface-500">HSC Stream:</span> <span class="font-medium">{{
+              viewApp.data.academicBackground.hsc?.stream || '-' }}</span></div>
+          <div><span class="text-surface-500">HSC Board:</span> <span class="font-medium">{{
+              viewApp.data.academicBackground.hsc?.board || '-' }}</span></div>
+          <div><span class="text-surface-500">HSC Year:</span> <span class="font-medium">{{
+              viewApp.data.academicBackground.hsc?.year || '-' }}</span></div>
+          <div><span class="text-surface-500">HSC Marks:</span> <span class="font-medium">{{
+              viewApp.data.academicBackground.hsc?.obtainedMarks }}/{{ viewApp.data.academicBackground.hsc?.totalMarks
+              }}</span></div>
+        </div>
+      </div>
+      }
+      <!-- Documents -->
+      @if (viewApp.data.documents) {
+      <div>
+        <label class="text-xs text-surface-500 font-semibold uppercase tracking-wider block mb-2">Documents</label>
+        <div class="grid grid-cols-2 gap-2 text-sm">
+          @for (doc of [
+          { label: 'Passport Photo', key: 'photoPath' },
+          { label: 'Signature', key: 'signaturePath' },
+          { label: 'Aadhar Card', key: 'aadharPath' },
+          { label: 'SSC Marksheet', key: 'sscPath' },
+          { label: 'HSC Marksheet', key: 'hscPath' },
+          { label: 'Leaving Certificate', key: 'leavingPath' },
+          { label: 'Caste Certificate', key: 'castePath' }
+          ]; track doc.key) {
+          <div class="border border-surface-200 rounded-lg p-2">
+            <p class="text-[10px] font-semibold text-surface-500 mb-1">{{ doc.label }}</p>
+            @if (viewApp.data.documents[doc.key]) {
+            <a [href]="getDocUrl(viewApp.data.documents[doc.key])" target="_blank"
+              class="text-primary-600 hover:underline text-[10px] font-medium">View / Download</a>
+            } @else {
+            <span class="text-[10px] text-surface-400 italic">Not submitted</span>
+            }
+          </div>
+          }
+        </div>
+      </div>
+      }
+      }
+    </div>
+  </div>
+</div>
+}
+
+<!-- Query Modal -->
+@if (showQueryModal && queryApp) {
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div class="fixed inset-0 bg-black/40 backdrop-blur-sm" (click)="closeAllModals()"></div>
+  <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-md animate-scale-in">
+    <div class="px-6 py-4 border-b border-surface-200">
+      <h3 class="text-lg font-bold text-surface-900">Raise Query</h3>
+      <p class="text-sm text-surface-500 mt-0.5">for {{ queryApp.name }} ({{ queryApp.applicationId }})</p>
+    </div>
+    <div class="p-6">
+      <textarea [(ngModel)]="queryMessage" rows="4" class="input resize-none"
+        [placeholder]="queryApp?.queryMessage ? queryApp!.queryMessage : 'Enter your query or request for clarification...'"></textarea>
+      <div class="flex justify-end gap-2 mt-4">
+        <button (click)="closeAllModals()" class="btn-ghost" [disabled]="queryLoading">Cancel</button>
+        <button (click)="submitQuery()" [disabled]="!queryMessage.trim() || queryLoading" class="btn-primary"
+          [class.opacity-50]="!queryMessage.trim() || queryLoading">
+          @if (queryLoading) { Submitting... } @else { Submit Query }
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+}
+
+<!-- Confirm Modal -->
+@if (showConfirmModal && confirmApp) {
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4">
+  <div class="fixed inset-0 bg-black/40 backdrop-blur-sm" (click)="closeAllModals()"></div>
+  <div class="relative bg-white rounded-xl shadow-2xl w-full max-w-sm animate-scale-in">
+    <div class="p-6 text-center">
+      @if (confirmAction === 'delete') {
+      <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-red-100 flex items-center justify-center"><svg
+          class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg></div>
+      <h4 class="text-lg font-bold text-surface-900 mb-2">Delete Application?</h4>
+      <p class="text-sm text-surface-500 mb-6">This will permanently delete {{ confirmApp.name }}'s application ({{
+        confirmApp.applicationId }}). This cannot be undone.</p>
+      <div class="flex gap-2 justify-center">
+        <button (click)="closeAllModals()" class="btn-ghost">Cancel</button>
+        <button (click)="confirmDelete()" class="btn-danger">Delete</button>
+      </div>
+      } @else {
+      <div class="w-12 h-12 mx-auto mb-4 rounded-full flex items-center justify-center"
+        [class]="confirmAction === 'approve' ? 'bg-emerald-100' : 'bg-red-100'">
+        @if (confirmAction === 'approve') {
+        <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        } @else {
+        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        }
+      </div>
+      <h4 class="text-lg font-bold text-surface-900 mb-2">{{ confirmAction === 'approve' ? 'Approve' : 'Reject' }}
+        Application?</h4>
+      <p class="text-sm text-surface-500 mb-6">{{ confirmAction === 'approve' ? 'Approve' : 'Reject' }} {{
+        confirmApp.name }}'s application ({{ confirmApp.applicationId }})?</p>
+      <div class="flex gap-2 justify-center">
+        <button (click)="closeAllModals()" class="btn-ghost" [disabled]="confirmLoading">Cancel</button>
+        <button (click)="confirmActionExecute()" class="btn-primary"
+          [disabled]="confirmLoading"
+          [class]="confirmAction === 'approve' ? '' : 'bg-red-600 hover:bg-red-700'"
+          [class.opacity-50]="confirmLoading">
+          @if (confirmLoading) { Processing... } @else { {{ confirmAction === 'approve' ? 'Approve' : 'Reject' }} }
+        </button>
+      </div>
+      }
+    </div>
+  </div>
+</div>
+}

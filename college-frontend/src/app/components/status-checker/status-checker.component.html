@@ -1,0 +1,166 @@
+<!-- Main -->
+<main class="flex-1 flex items-center justify-center px-4 py-10" style="min-height: calc(100vh - 200px);">
+  <div class="w-full max-w-xl animate-fade-in">
+
+    <!-- Search Card -->
+    <div class="card p-6 md:p-8">
+      <h1 class="text-2xl md:text-3xl font-extrabold text-surface-900 mb-2 text-center">
+        Check Application Status
+      </h1>
+      <p class="text-surface-600 mb-6 text-center">
+        You can check your status using <span class="font-semibold">Application ID</span> or <span
+          class="font-semibold">Email</span>.
+      </p>
+
+      <!-- Tabs -->
+      <div class="flex mb-4 rounded-xl border border-surface-200 overflow-hidden text-sm">
+        <button type="button" (click)="showIdTab()"
+          [class]="activeTab === 'id' ? 'flex-1 py-2 text-center font-medium bg-primary-600 text-white' : 'flex-1 py-2 text-center font-medium bg-white text-surface-700 hover:bg-surface-50 transition-colors'">
+          By Application ID
+        </button>
+        <button type="button" (click)="showEmailTab()"
+          [class]="activeTab === 'email' ? 'flex-1 py-2 text-center font-medium bg-primary-600 text-white' : 'flex-1 py-2 text-center font-medium bg-white text-surface-700 hover:bg-surface-50 transition-colors'">
+          By Email
+        </button>
+      </div>
+
+      <!-- Search: By Application ID -->
+      @if (activeTab === 'id') {
+      <div class="space-y-4">
+        <div>
+          <label for="appId" class="block text-sm font-semibold text-surface-700 mb-1">Application ID</label>
+          <input type="text" id="appId" [(ngModel)]="appId" class="input" placeholder="e.g. GU2025-00001"
+            (keyup.enter)="searchById()">
+        </div>
+        <button type="button" class="btn-primary w-full justify-center" [disabled]="searching" (click)="searchById()">
+          @if (searching) {
+          <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-block" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+            <path class="opacity-75" fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+          </svg>
+          Searching...
+          } @else {
+          Check Status by Application ID
+          }
+        </button>
+      </div>
+      }
+
+      <!-- Search: By Email -->
+      @if (activeTab === 'email') {
+      <div class="space-y-4">
+        <div>
+          <label for="emailInput" class="block text-sm font-semibold text-surface-700 mb-1">Registered Email</label>
+          <input type="text" id="emailInput" [(ngModel)]="emailInput" class="input" placeholder="you@example.com"
+            (keyup.enter)="searchByEmail()">
+        </div>
+        <button type="button" class="btn-primary w-full justify-center" [disabled]="searching"
+          (click)="searchByEmail()">
+          @if (searching) {
+          <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-block" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+            <path class="opacity-75" fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+          </svg>
+          Searching...
+          } @else {
+          Check Status by Email
+          }
+        </button>
+      </div>
+      }
+
+      <!-- Not found -->
+      @if (notFound) {
+      <div class="mt-6">
+        <div class="rounded-xl border border-red-100 bg-red-50 p-4">
+          <p class="text-sm font-medium text-red-700">{{ notFoundText }}</p>
+        </div>
+      </div>
+      }
+    </div>
+
+    <!-- Result card -->
+    @if (resultFound) {
+    <div class="mt-4 card p-6 animate-fade-in">
+      <h2 class="text-lg font-bold text-surface-900 mb-4 flex items-center gap-2">
+        <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        Application Details
+      </h2>
+
+      <div class="space-y-2.5 text-sm">
+        <div class="flex justify-between items-start">
+          <span class="font-semibold text-surface-600 w-32 flex-shrink-0">Application ID</span>
+          <span class="text-surface-900 font-mono font-medium text-right">{{ resId }}</span>
+        </div>
+        <div class="flex justify-between items-start">
+          <span class="font-semibold text-surface-600 w-32 flex-shrink-0">Name</span>
+          <span class="text-surface-900 text-right">{{ resName }}</span>
+        </div>
+        <div class="flex justify-between items-start">
+          <span class="font-semibold text-surface-600 w-32 flex-shrink-0">Program</span>
+          <span class="text-surface-900 text-right">{{ resProgram }}</span>
+        </div>
+        <div class="flex justify-between items-start">
+          <span class="font-semibold text-surface-600 w-32 flex-shrink-0">Submitted On</span>
+          <span class="text-surface-900 text-right">{{ resSubmitted }}</span>
+        </div>
+        <div class="flex justify-between items-center pt-1">
+          <span class="font-semibold text-surface-600 w-32 flex-shrink-0">Status</span>
+          <span
+            [class]="'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ' + getStatusBadgeClasses(resStatus)">
+            {{ resStatus }}
+          </span>
+        </div>
+      </div>
+
+      <!-- ===== QUERY RAISED SECTION ===== -->
+      @if (resStatus === 'Query Raised' && resQueryMessage) {
+      <div class="mt-5 rounded-xl border border-amber-200 bg-amber-50 p-4">
+        <!-- Query header -->
+        <div class="flex items-start gap-2 mb-3">
+          <svg class="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div>
+            <p class="text-sm font-bold text-amber-800">Action Required: Query from Admissions</p>
+            <p class="text-sm text-amber-700 mt-1 leading-relaxed">{{ resQueryMessage }}</p>
+          </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="border-t border-amber-200 my-4"></div>
+
+        <p class="text-sm text-amber-800 mb-3">Please reopen your application to make the necessary corrections and resubmit it.</p>
+        <button type="button" (click)="reopenApplication()"
+          class="w-full btn-primary bg-amber-600 hover:bg-amber-700 border-amber-600 hover:border-amber-700 text-white flex justify-center items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Reopen & Edit Application
+        </button>
+      </div>
+      }
+
+      <!-- Generic query message for non-Query Raised statuses (keep backward compat) -->
+      @if (resStatus !== 'Query Raised' && resQueryMessage) {
+      <div class="mt-4 rounded-lg bg-surface-50 border border-surface-200 px-3 py-2.5">
+        <p class="text-sm text-surface-600"><span class="font-semibold">Note from Admissions:</span> {{ resQueryMessage }}</p>
+      </div>
+      }
+
+      <p class="mt-5 text-xs text-surface-500 border-t border-surface-100 pt-4">
+        For any questions, contact the Admissions Office at
+        <span class="font-semibold text-primary-600">admissions&#64;globaluni.edu</span>.
+      </p>
+    </div>
+    }
+
+  </div>
+</main>

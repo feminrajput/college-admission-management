@@ -1,0 +1,76 @@
+:host {
+  display: block;
+  height: 100vh;
+}
+
+.login-page {
+  display: flex;
+  min-height: 100vh;
+}
+
+.branding-side {
+  display: none;
+  width: 50%;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #6d28d9 100%); /* Default */
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.5s ease;
+}
+
+.branding-side.college-theme {
+  background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%); /* Blue Theme */
+}
+
+.branding-side.university-theme {
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%); /* Emerald Theme */
+}
+.branding-side::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 60%);
+}
+.branding-side::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -30%;
+  width: 80%;
+  height: 80%;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+}
+
+.branding-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  max-width: 480px;
+}
+
+.form-side {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: white;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+@media (min-width: 768px) {
+  .branding-side {
+    display: flex;
+    align-items: center;
+  }
+}
