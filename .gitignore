@@ -5,7 +5,6 @@ college-frontend/node_modules/
 
 # Environment files
 college-backend/.env
-college-frontend/src/environments/environment.prod.ts
 
 # Production builds
 college-frontend/dist/
